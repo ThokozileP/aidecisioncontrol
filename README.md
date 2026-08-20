@@ -49,28 +49,37 @@ frontmatter — it will appear automatically on `/perspectives` and get its own
 
 ## Cloudflare deployment
 
-This repository deploys to **Cloudflare Pages** via the GitHub integration (push to
-`main` triggers a build and deploy). It is a static site with no Workers Functions, so
-no server-side runtime configuration is required.
-
-Cloudflare Pages dashboard build settings:
+This repository is connected to Cloudflare as a **Workers Build** (not the classic
+Cloudflare Pages product) — pushing to `main` triggers Cloudflare to run the project's
+configured build command, then its deploy command:
 
 | Setting | Value |
 | --- | --- |
-| Framework preset | Astro |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
 | Root directory | `/` |
 | Node version | 20+ (project requires `>=20.3.0`) |
 
-A `wrangler.toml` is included for CLI parity (`wrangler pages deploy dist`) but is not
-required for the dashboard's Git-connected deployments.
+Because the deploy step is `wrangler deploy` rather than `wrangler pages deploy`, the
+site is served as a Worker with **static assets** — there is no Worker script (`main`)
+since this site has no server-side logic. `wrangler.toml` declares the asset directory:
+
+```toml
+[assets]
+directory = "./dist"
+```
+
+`wrangler` is pinned as a devDependency so Cloudflare's build doesn't fetch a fresh copy
+on every deploy. To deploy manually from the CLI: `npm run build && npx wrangler deploy`.
 
 ## Custom domain
 
-Production is served at **aidecisioncontrol.org**, configured as a custom domain on the
-Cloudflare Pages project. DNS is managed separately in Google Workspace / the domain
-registrar — this repository does not manage DNS records.
+Production is served at **aidecisioncontrol.org**. The domain's nameservers are already
+on Cloudflare, but the domain must be attached to this Worker in the Cloudflare
+dashboard (Workers & Pages → this project → Settings → Domains & Routes) before the
+site is reachable there — pushing code alone does not attach a domain. DNS records
+themselves are managed separately (Google Workspace / registrar) — this repository does
+not manage DNS.
 
 ## Content policy
 

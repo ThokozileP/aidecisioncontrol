@@ -1,7 +1,9 @@
-# Cloudflare Pages configuration for the static Astro build.
-# The project has no server-side logic (no Workers Functions), so this
-# file only declares the build output directory for `wrangler pages`
-# CLI parity with the dashboard's Git integration settings.
+# This Cloudflare project's build pipeline runs `npx wrangler deploy`
+# (Workers-style deploy, not the classic Pages pipeline), so it needs an
+# [assets] block telling it where the static build output lives — there
+# is no Worker script (`main`) because the site has no server-side logic.
 name = "aidecisioncontrol"
-pages_build_output_dir = "dist"
 compatibility_date = "2026-08-01"
+
+[assets]
+directory = "./dist"
