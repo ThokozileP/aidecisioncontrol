@@ -1,9 +1,15 @@
 # This Cloudflare project's build pipeline runs `npx wrangler deploy`
-# (Workers-style deploy, not the classic Pages pipeline), so it needs an
-# [assets] block telling it where the static build output lives — there
-# is no Worker script (`main`) because the site has no server-side logic.
+# (Workers-style deploy, not the classic Pages pipeline). `deploy` failed
+# with "assets.directory does not exist" because the dashboard's build
+# step never produced dist/ before the deploy command ran — so the Astro
+# build is declared here instead, making `wrangler deploy` self-contained:
+# it builds the site itself before uploading assets, regardless of
+# whatever "Build command" the dashboard project has (or doesn't have) set.
 name = "aidecisioncontrol"
 compatibility_date = "2026-08-01"
+
+[build]
+command = "npm run build"
 
 [assets]
 directory = "./dist"
