@@ -223,24 +223,39 @@ function isActive(href: string): boolean {
 <script>
   const toggle = document.getElementById('nav-toggle');
   const nav = document.getElementById('primary-nav');
+  const main = document.querySelector('main');
+  const footer = document.querySelector<HTMLElement>('.site-footer');
 
   if (toggle && nav) {
-    toggle.addEventListener('click', () => {
-      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!isOpen));
-      if (isOpen) {
-        nav.removeAttribute('data-open');
-      } else {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      if (open) {
         nav.setAttribute('data-open', 'true');
+      } else {
+        nav.removeAttribute('data-open');
       }
+      // The full-screen mobile panel visually covers <main> and the footer,
+      // but without this they stay in the tab order — a keyboard or screen
+      // reader user could tab straight past the open menu into content
+      // hidden behind it. `inert` removes them from focus/AT while open.
+      if (main) main.inert = open;
+      if (footer) footer.inert = open;
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
     });
 
     // Close the mobile panel when a nav link is activated.
     nav.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        toggle.setAttribute('aria-expanded', 'false');
-        nav.removeAttribute('data-open');
-      });
+      link.addEventListener('click', () => setOpen(false));
+    });
+
+    nav.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        toggle.focus();
+      }
     });
   }
 </script>

@@ -13,3 +13,6 @@ command = "npm run build"
 
 [assets]
 directory = "./dist"
+# Without this, Workers assets return a generic Cloudflare 404 instead of
+# our branded dist/404.html for any unmatched path.
+not_found_handling = "404-page"
