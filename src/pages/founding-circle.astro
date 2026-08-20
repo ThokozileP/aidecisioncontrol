@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import {
+  foundingExperts,
+  relevantBackgrounds,
+  foundingExpertCommitments,
+} from '../data/foundingExperts';
+import { mailto } from '../consts';
+
+const confirmedExperts = foundingExperts.filter((expert) => expert.confirmed);
+---
+
+<BaseLayout
+  title="Founding Circle"
+  description="The AI Decision Control Forum is forming an initial Founding Expert Circle of 8–12 practitioners and researchers across regulated AI. Express interest in joining."
+>
+  <section class="section hero">
+    <div class="wrapper">
+      <p class="eyebrow">Founding Expert Circle</p>
+      <h1>Help shape the practice of AI Decision Control.</h1>
+      <p class="lede">
+        The Forum is forming an initial Founding Expert Circle of <strong>8–12 practitioners and
+        researchers</strong> with complementary expertise across regulated AI.
+      </p>
+      <a class="button button--primary" href={mailto('Founding Expert Circle')}>Express Interest</a>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="wrapper">
+      <SectionHeading heading="Relevant backgrounds" />
+      <ul class="chip-list">
+        {relevantBackgrounds.map((background) => <li>{background}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrapper">
+      <SectionHeading heading="Founding Experts will" />
+      <ul class="commitment-list">
+        {foundingExpertCommitments.map((item) => <li class="card">{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrapper commitment-box">
+      <h2>Commitment</h2>
+      <p class="commitment-box__amount">Approximately three expert roundtables during the first three months.</p>
+      <p class="commitment-box__note">
+        This is a voluntary advisory contribution, not an employment position.
+      </p>
+      <a class="button button--primary" href={mailto('Founding Expert Circle')}>Express Interest</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrapper">
+      <SectionHeading heading="Founding Experts" />
+      {
+        confirmedExperts.length === 0 ? (
+          <p class="lede">
+            No Founding Experts have been confirmed yet. Names and affiliations will appear here
+            once practitioners have formally joined the Circle.
+          </p>
+        ) : (
+          <ul class="grid grid--2">
+            {confirmedExperts.map((expert) => (
+              <li class="card">
+                <h3>{expert.name}</h3>
+                <p>{expert.role}, {expert.affiliation}</p>
+                <p>{expert.bio}</p>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero h1 {
+    font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+    max-width: 22ch;
+    margin-top: var(--space-1);
+  }
+
+  .hero .lede {
+    margin-block: var(--space-2) var(--space-3);
+    max-width: 56ch;
+  }
+
+  .chip-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .chip-list li {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+
+  .commitment-list {
+    list-style: none;
+    display: grid;
+    gap: var(--space-2);
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .commitment-box {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-width: 46rem;
+  }
+
+  .commitment-box__amount {
+    font-size: 1.2rem;
+    font-weight: 650;
+    color: var(--color-white);
+  }
+
+  .commitment-box__note {
+    color: var(--color-steel);
+  }
+
+  .commitment-box .button {
+    align-self: flex-start;
+    margin-top: var(--space-1);
+  }
+</style>

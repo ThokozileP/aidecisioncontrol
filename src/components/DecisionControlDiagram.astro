@@ -1,0 +1,135 @@
+---
+// Hero visual: three incoming decision paths converge on a central control
+// point, which resolves to one of three outcomes. Pure SVG — no imagery.
+---
+
+<svg
+  class="decision-diagram"
+  viewBox="0 0 480 360"
+  role="img"
+  aria-labelledby="decision-diagram-title"
+>
+  <title id="decision-diagram-title">
+    Diagram showing three decision paths entering a central control point, which resolves to
+    Allow, Escalate or Block.
+  </title>
+
+  <!-- incoming paths -->
+  <path d="M20 60 C 120 60, 140 170, 210 178" class="line line--in" />
+  <path d="M20 180 H 210" class="line line--in" />
+  <path d="M20 300 C 120 300, 140 190, 210 182" class="line line--in" />
+
+  <circle cx="20" cy="60" r="5" class="node node--in" />
+  <circle cx="20" cy="180" r="5" class="node node--in" />
+  <circle cx="20" cy="300" r="5" class="node node--in" />
+
+  <!-- control point -->
+  <g class="control-point">
+    <rect x="205" y="155" width="70" height="50" rx="8" class="control-point__box" />
+    <text x="240" y="185" text-anchor="middle" class="control-point__label">CONTROL</text>
+  </g>
+
+  <!-- outgoing paths -->
+  <path d="M275 168 C 340 168, 360 60, 440 60" class="line line--out" />
+  <path d="M275 180 H 440" class="line line--out" />
+  <path d="M275 192 C 340 192, 360 300, 440 300" class="line line--out" />
+
+  <!-- outcomes -->
+  <g transform="translate(440 60)">
+    <circle r="6" class="outcome outcome--allow" />
+    <text x="16" y="5" class="outcome-label outcome-label--allow">ALLOW</text>
+  </g>
+  <g transform="translate(440 180)">
+    <circle r="6" class="outcome outcome--escalate" />
+    <text x="16" y="5" class="outcome-label outcome-label--escalate">ESCALATE</text>
+  </g>
+  <g transform="translate(440 300)">
+    <rect x="-6" y="-6" width="12" height="12" class="outcome outcome--block" />
+    <text x="16" y="5" class="outcome-label outcome-label--block">BLOCK</text>
+  </g>
+</svg>
+
+<style>
+  .decision-diagram {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .line {
+    fill: none;
+    stroke: var(--color-steel);
+    stroke-width: 1.5;
+    opacity: 0.55;
+  }
+
+  .line--out {
+    opacity: 0.4;
+  }
+
+  .node--in {
+    fill: var(--color-steel);
+  }
+
+  .control-point__box {
+    fill: var(--color-navy-deep);
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+  }
+
+  .control-point__label {
+    fill: var(--color-white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-family: var(--font-sans);
+  }
+
+  .outcome-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    font-family: var(--font-sans);
+    dominant-baseline: middle;
+  }
+
+  .outcome--allow {
+    fill: var(--color-accent);
+  }
+
+  .outcome-label--allow {
+    fill: var(--color-navy);
+  }
+
+  .outcome--escalate {
+    fill: var(--color-steel);
+  }
+
+  .outcome-label--escalate {
+    fill: var(--color-navy);
+  }
+
+  .outcome--block {
+    fill: var(--color-navy-deep);
+  }
+
+  .outcome-label--block {
+    fill: var(--color-navy);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .control-point__box {
+      animation: pulse 3.5s ease-in-out infinite;
+    }
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      stroke-opacity: 1;
+    }
+    50% {
+      stroke-opacity: 0.5;
+    }
+  }
+</style>

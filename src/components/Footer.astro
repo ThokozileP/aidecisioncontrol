@@ -1,0 +1,118 @@
+---
+import { footerNav } from '../data/navigation';
+import { SITE } from '../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrapper site-footer__inner">
+    <div class="site-footer__about">
+      <p class="site-footer__name">{SITE.name}</p>
+      <p class="site-footer__tagline">{SITE.tagline}</p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      <ul>
+        {footerNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="site-footer__contact">
+      <p>
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </p>
+      {
+        SITE.linkedInUrl && (
+          <p>
+            <a href={SITE.linkedInUrl} rel="noopener noreferrer" target="_blank">
+              LinkedIn
+            </a>
+          </p>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="wrapper site-footer__legal">
+    <p>&copy; {year} {SITE.name}.</p>
+    <p class="site-footer__disclaimer">
+      AI Decision Control is an emerging area of practice. The Forum exists to explore and develop
+      its operational principles collaboratively.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-navy-deep);
+    color: var(--color-steel);
+    margin-top: var(--space-6);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer__name {
+    color: var(--color-white);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .site-footer__tagline {
+    max-width: 28rem;
+  }
+
+  .site-footer__nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .site-footer__nav a,
+  .site-footer__contact a {
+    color: var(--color-steel);
+    text-decoration: none;
+  }
+
+  .site-footer__nav a:hover,
+  .site-footer__contact a:hover {
+    color: var(--color-white);
+  }
+
+  .site-footer__contact p {
+    margin-bottom: 0.6rem;
+  }
+
+  .site-footer__legal {
+    border-top: 1px solid rgba(115, 151, 170, 0.25);
+    padding-block: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .site-footer__disclaimer {
+    /* Full steel (not dimmed) — at 0.85 opacity this dropped to ~4.3:1
+       against the navy background, just under WCAG AA for normal text. */
+    max-width: 48rem;
+    color: var(--color-steel);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__inner {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+
+    .site-footer__legal {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+</style>

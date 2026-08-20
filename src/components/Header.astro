@@ -1,0 +1,246 @@
+---
+import { mainNav } from '../data/navigation';
+import { mailto } from '../consts';
+
+const path = Astro.url.pathname;
+function isActive(href: string): boolean {
+  const target = href.split('#')[0] || '/';
+  return target === '/' ? path === '/' : path.startsWith(target);
+}
+---
+
+<header class="site-header">
+  <div class="wrapper site-header__inner">
+    <a class="brand" href="/">
+      <span class="brand__mark" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="12.5" stroke="#15A6DF" stroke-width="1.5" />
+          <circle cx="14" cy="14" r="3" fill="#15A6DF" />
+          <path d="M14 3.5V8" stroke="#15A6DF" stroke-width="1.5" stroke-linecap="round" />
+          <path d="M22.5 19L18.6 16.7" stroke="#15A6DF" stroke-width="1.5" stroke-linecap="round" />
+          <path d="M5.5 19L9.4 16.7" stroke="#15A6DF" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </span>
+      <span class="brand__text">
+        <span class="brand__name">AI Decision Control</span>
+        <span class="brand__suffix">Forum</span>
+      </span>
+    </a>
+
+    <button
+      class="nav-toggle"
+      id="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+    >
+      <span class="visually-hidden">Toggle menu</span>
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+    </button>
+
+    <nav class="site-nav" id="primary-nav" aria-label="Primary">
+      <ul class="site-nav__list">
+        {
+          mainNav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="site-nav__ctas">
+        <a class="button button--ghost" href="/founding-circle">Become a Founding Expert</a>
+        <a class="button button--primary button--compact" href={mailto('Join the Conversation')}>
+          Join the Conversation
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(248, 250, 252, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 0.9rem;
+    gap: var(--space-2);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--color-navy-deep);
+    flex-shrink: 0;
+  }
+
+  .brand__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .brand__name {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .brand__suffix {
+    font-size: 0.7rem;
+    color: var(--color-steel);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+
+  .nav-toggle__bars,
+  .nav-toggle__bars::before,
+  .nav-toggle__bars::after {
+    content: '';
+    display: block;
+    width: 1.1rem;
+    height: 2px;
+    background: var(--color-navy-deep);
+    position: relative;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .nav-toggle__bars::before {
+    position: absolute;
+    top: -0.35rem;
+  }
+
+  .nav-toggle__bars::after {
+    position: absolute;
+    top: 0.35rem;
+  }
+
+  .nav-toggle[aria-expanded='true'] .nav-toggle__bars {
+    background: transparent;
+  }
+
+  .nav-toggle[aria-expanded='true'] .nav-toggle__bars::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+
+  .nav-toggle[aria-expanded='true'] .nav-toggle__bars::after {
+    transform: rotate(-45deg);
+    top: 0;
+  }
+
+  .site-nav {
+    display: none;
+  }
+
+  .site-nav__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .site-nav__list a {
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--color-ink);
+    font-size: 1rem;
+  }
+
+  .site-nav__list a[aria-current='page'] {
+    color: var(--color-navy);
+    font-weight: 700;
+  }
+
+  .site-nav__ctas {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  /* Mobile: full-screen panel when open */
+  @media (max-width: 959px) {
+    .site-nav[data-open='true'] {
+      display: block;
+      position: fixed;
+      inset: 4.1rem 0 0 0;
+      background: var(--color-bg);
+      overflow-y: auto;
+      padding: var(--space-3);
+      border-top: 1px solid var(--color-border);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .nav-toggle {
+      display: none;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .site-nav__list {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .site-nav__ctas {
+      flex-direction: row;
+      margin-top: 0;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const nav = document.getElementById('primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      if (isOpen) {
+        nav.removeAttribute('data-open');
+      } else {
+        nav.setAttribute('data-open', 'true');
+      }
+    });
+
+    // Close the mobile panel when a nav link is activated.
+    nav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        toggle.setAttribute('aria-expanded', 'false');
+        nav.removeAttribute('data-open');
+      });
+    });
+  }
+</script>

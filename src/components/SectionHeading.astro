@@ -1,0 +1,24 @@
+---
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  lede?: string;
+  level?: 'h1' | 'h2' | 'h3';
+}
+
+const { eyebrow, heading, lede, level = 'h2' } = Astro.props;
+const Tag = level;
+---
+
+<div class="section-heading">
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <Tag class="section-heading__title">{heading}</Tag>
+  {lede && <p class="lede" style="margin-top: 0.75rem;">{lede}</p>}
+</div>
+
+<style>
+  .section-heading__title {
+    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.25rem);
+    margin-top: var(--space-1);
+  }
+</style>

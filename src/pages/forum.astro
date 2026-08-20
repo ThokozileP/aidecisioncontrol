@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { forumFocusAreas } from '../data/forumFocusAreas';
+import { mailto } from '../consts';
+---
+
+<BaseLayout
+  title="Forum"
+  description="The AI Decision Control Forum is an independent practitioner community exploring how organisations retain control as AI systems influence and execute consequential decisions."
+>
+  <section class="section">
+    <div class="wrapper">
+      <SectionHeading
+        level="h1"
+        eyebrow="AI Decision Control Forum"
+        heading="A cross-disciplinary conversation about control."
+      />
+      <div class="forum-intro">
+        <p>
+          The AI Decision Control Forum is an independent practitioner community bringing together
+          experts working across AI engineering, risk, healthcare, financial services, assurance,
+          regulation and research.
+        </p>
+        <p>
+          The Forum exists to create a practical cross-disciplinary conversation about how
+          organisations retain control as AI systems become increasingly capable of influencing
+          and executing consequential decisions.
+        </p>
+      </div>
+      <div class="forum-ctas">
+        <a class="button button--primary" href={mailto('Join the Conversation')}>Join the Conversation</a>
+        <a class="button button--ghost" href="/founding-circle">Become a Founding Expert</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="wrapper">
+      <SectionHeading heading="Focus areas" />
+      <ul class="focus-grid">
+        {forumFocusAreas.map((area) => <li class="card">{area}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrapper related-links">
+      <a class="card related-link" href="/founding-circle">
+        <span class="tag">Founding Circle</span>
+        <h3>Help shape the practice</h3>
+        <p>The Forum is forming an initial Founding Expert Circle of 8–12 practitioners.</p>
+      </a>
+      <a class="card related-link" href="/events">
+        <span class="tag">Events</span>
+        <h3>Expert conversations</h3>
+        <p>Roundtables and practitioner sessions on control at the point of decision.</p>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .forum-intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-width: 62ch;
+    color: var(--color-ink-muted);
+    font-size: 1.05rem;
+  }
+
+  .forum-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .focus-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-2);
+  }
+
+  .focus-grid li {
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+
+  .related-links {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .related-link {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: border-color 0.15s ease;
+  }
+
+  .related-link:hover {
+    border-color: var(--color-accent);
+  }
+
+  .related-link p {
+    color: var(--color-ink-muted);
+  }
+
+  @media (min-width: 768px) {
+    .related-links {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

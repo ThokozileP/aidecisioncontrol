@@ -1,0 +1,19 @@
+---
+import { SITE } from '../consts';
+
+// Organization schema only — accurate to what the Forum actually is today.
+// No legal entity status, address or registration number is asserted.
+const sameAs = SITE.linkedInUrl ? [SITE.linkedInUrl] : [];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.tagline,
+  email: SITE.email,
+  ...(sameAs.length ? { sameAs } : {}),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />

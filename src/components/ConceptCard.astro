@@ -1,0 +1,26 @@
+---
+interface Props {
+  term: string;
+  question: string;
+}
+
+const { term, question } = Astro.props;
+---
+
+<div class="card concept-card">
+  <h3>{term}</h3>
+  <p>{question}</p>
+</div>
+
+<style>
+  .concept-card h3 {
+    /* Accent cyan fails WCAG AA against light card backgrounds at heading
+       size (~2.7:1) — navy holds the same visual role at readable contrast. */
+    color: var(--color-navy);
+    margin-bottom: 0.5rem;
+  }
+
+  .concept-card p {
+    color: var(--color-ink-muted);
+  }
+</style>

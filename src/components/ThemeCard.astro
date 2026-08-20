@@ -1,0 +1,27 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  badge?: string;
+}
+
+const { title, description, badge } = Astro.props;
+---
+
+<div class="card theme-card">
+  {badge && <span class="tag">{badge}</span>}
+  <h3>{title}</h3>
+  <p>{description}</p>
+</div>
+
+<style>
+  .theme-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .theme-card p {
+    color: var(--color-ink-muted);
+  }
+</style>

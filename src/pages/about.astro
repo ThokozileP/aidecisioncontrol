@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ConceptCard from '../components/ConceptCard.astro';
+import { aboutFocusAreas } from '../data/aboutFocus';
+---
+
+<BaseLayout
+  title="About"
+  description="The AI Decision Control Forum is an independent practitioner initiative convening cross-disciplinary expertise around the operational control of consequential AI decisions."
+>
+  <section class="section hero">
+    <div class="wrapper">
+      <p class="eyebrow">About</p>
+      <h1>Why the Forum exists</h1>
+      <div class="hero__copy">
+        <p>
+          AI governance has made substantial progress in defining principles, responsibilities,
+          risk frameworks and regulatory obligations.
+        </p>
+        <p>
+          But as AI becomes embedded in operational workflows, organisations face another
+          challenge:
+        </p>
+        <p class="hero__question">
+          How are those requirements enforced at the moment an AI-supported decision or action
+          occurs?
+        </p>
+        <p>
+          The AI Decision Control Forum exists to bring together the disciplines required to
+          answer that question.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="wrapper">
+      <SectionHeading heading="Our focus" lede="The Forum examines the intersection of:" />
+      <div class="grid grid--4">
+        {aboutFocusAreas.map((area) => <ConceptCard term={area.term} question={area.question} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrapper independence">
+      <SectionHeading heading="Independence" />
+      <p class="lede">
+        The AI Decision Control Forum is being developed as an independent practitioner
+        initiative. Its purpose is to convene cross-disciplinary expertise around the operational
+        control of consequential AI decisions.
+      </p>
+      <p class="independence__note">
+        The Forum is not a regulator, standards body or certification authority.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero h1 {
+    font-size: clamp(1.9rem, 1.5rem + 1.8vw, 2.5rem);
+    margin-top: var(--space-1);
+  }
+
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-width: 62ch;
+    margin-top: var(--space-3);
+    color: var(--color-ink-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero__question {
+    font-size: 1.25rem;
+    font-weight: 650;
+    color: var(--color-navy-deep);
+  }
+
+  .independence {
+    max-width: 62ch;
+  }
+
+  .independence__note {
+    margin-top: var(--space-2);
+    color: var(--color-ink-muted);
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ThemeCard from '../components/ThemeCard.astro';
+import { eventThemes, eventFormats } from '../data/eventThemes';
+import { mailto } from '../consts';
+---
+
+<BaseLayout
+  title="Events"
+  description="Expert conversations on control at the point of decision. The AI Decision Control Forum runs invitation-only roundtables, practitioner sessions and cross-sector discussions."
+>
+  <section class="section hero">
+    <div class="wrapper">
+      <p class="eyebrow">Events</p>
+      <h1>Expert conversations on control at the point of decision.</h1>
+      <p class="lede">
+        The Forum's events bring practitioners together to work through the operational questions
+        that AI governance alone does not answer.
+      </p>
+      <a class="button button--primary" href={mailto('AI Decision Control Events')}>
+        Register interest in future events
+      </a>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="wrapper">
+      <SectionHeading heading="Format" />
+      <ul class="format-list">
+        {eventFormats.map((format) => <li class="card">{format}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrapper">
+      <SectionHeading heading="Proposed discussion themes" lede="No dates have been scheduled yet. These themes outline the questions early Forum events are expected to address." />
+      <div class="grid grid--2">
+        {eventThemes.map((theme) => <ThemeCard title={theme.title} description={theme.description} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrapper cta-block">
+      <h2>No events are scheduled yet.</h2>
+      <p>Register your interest and we'll be in touch as the Forum's event programme takes shape.</p>
+      <a class="button button--primary" href={mailto('AI Decision Control Events')}>
+        Register interest in future events
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero h1 {
+    font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+    max-width: 22ch;
+    margin-top: var(--space-1);
+  }
+
+  .hero .lede {
+    margin-block: var(--space-2) var(--space-3);
+    max-width: 56ch;
+  }
+
+  .format-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-2);
+  }
+
+  .format-list li {
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+
+  .cta-block {
+    max-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .cta-block p {
+    color: var(--color-steel);
+  }
+
+  .cta-block .button {
+    align-self: flex-start;
+    margin-top: var(--space-1);
+  }
+</style>

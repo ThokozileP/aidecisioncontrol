@@ -1,0 +1,58 @@
+---
+import type { Sector } from '../data/sectors';
+
+interface Props {
+  sector: Sector;
+}
+
+const { sector } = Astro.props;
+---
+
+<div class="card sector-card">
+  <h3>{sector.name}</h3>
+  <ul class="sector-card__examples">
+    {sector.examples.map((example) => <li>{example}</li>)}
+  </ul>
+  <p class="sector-card__question">{sector.question}</p>
+</div>
+
+<style>
+  .sector-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .sector-card__examples {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem 1rem;
+    color: var(--color-ink-muted);
+    font-size: 0.92rem;
+  }
+
+  .sector-card__examples li {
+    padding-left: 0.9rem;
+    position: relative;
+  }
+
+  .sector-card__examples li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 5px;
+    height: 5px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  .sector-card__question {
+    margin-top: auto;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+</style>
