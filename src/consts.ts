@@ -10,10 +10,7 @@ export const SITE = {
   statement: 'Govern the system. Control the decision.',
   supportingStatement: 'From governance requirements to control at the point of execution.',
   email: 'hello@aidecisioncontrol.org',
-  // No confirmed LinkedIn page exists yet. Set this once the Forum's
-  // LinkedIn presence is created — every template checks for a non-empty
-  // value before rendering a link, so nothing invented shows up meanwhile.
-  linkedInUrl: '',
+  linkedInUrl: 'https://www.linkedin.com/company/ai-decision-control-forum',
 } as const;
 
 export function mailto(subject: string): string {
