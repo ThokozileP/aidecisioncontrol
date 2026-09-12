@@ -1,0 +1,44 @@
+---
+export const prerender = true;
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MembershipHero from '../components/membership/MembershipHero.astro';
+import MembershipBenefits from '../components/membership/MembershipBenefits.astro';
+import { MembershipForm } from '../components/membership/MembershipForm';
+import '../styles/membership.css';
+---
+
+<BaseLayout
+  title="Membership"
+  description="Join the AI Decision Control Forum and become part of a global professional community focused on AI governance, control, risk, safety and regulation."
+>
+  <MembershipHero />
+  <MembershipBenefits />
+
+  <section class="section" id="apply">
+    <div class="wrapper membership-apply">
+      <p class="eyebrow">Apply</p>
+      <h2>Professional Membership Application</h2>
+      <p class="lede">
+        Complete the four steps below to apply. You can review everything before payment —
+        nothing is charged until you confirm on the final step.
+      </p>
+      <MembershipForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .membership-apply {
+    max-width: 48rem;
+  }
+
+  .membership-apply h2 {
+    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.25rem);
+    margin-top: var(--space-1);
+  }
+
+  .membership-apply .lede {
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+</style>

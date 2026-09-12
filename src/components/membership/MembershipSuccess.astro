@@ -1,0 +1,151 @@
+---
+import { CheckCircle2 } from 'lucide-react';
+
+interface Props {
+  firstName: string;
+  membershipId: string;
+  expiryDate: string;
+}
+
+const { firstName, membershipId, expiryDate } = Astro.props;
+const formattedExpiry = new Date(expiryDate).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<section class="section membership-success">
+  <div class="wrapper membership-success__inner">
+    <span class="membership-success__icon" aria-hidden="true">
+      <CheckCircle2 size={40} strokeWidth={1.5} />
+    </span>
+    <p class="eyebrow">Membership confirmed</p>
+    <h1>Welcome to the AI Decision Control Forum.</h1>
+    <p class="lede">
+      Your membership has been successfully activated, {firstName}. You are now part of a
+      growing professional community focused on the governance, control and responsible
+      development of AI decision-making.
+    </p>
+
+    <dl class="membership-success__details">
+      <div>
+        <dt>Membership ID</dt>
+        <dd>{membershipId}</dd>
+      </div>
+      <div>
+        <dt>Membership</dt>
+        <dd>Professional Member</dd>
+      </div>
+      <div>
+        <dt>Valid until</dt>
+        <dd>{formattedExpiry}</dd>
+      </div>
+    </dl>
+
+    <p class="tag membership-success__discount">20% event discount included with your membership</p>
+
+    <div class="membership-success__ctas">
+      <a class="button button--primary" href="/">Explore the Forum</a>
+      <a class="button button--secondary" href="/events">View Upcoming Events</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="wrapper membership-benefit">
+    <p class="eyebrow">Your Member Benefit</p>
+    <h2>20% off Forum events</h2>
+    <p class="lede">
+      Your Professional Membership includes 20% off eligible AI Decision Control Forum events.
+    </p>
+    <p class="membership-benefit__note">
+      Use your membership email or Membership ID when registering for eligible events. Automated
+      discount application at checkout is not yet connected — event registration currently applies
+      it manually until that integration is in place.
+    </p>
+  </div>
+</section>
+
+<style>
+  .membership-success {
+    background: var(--color-navy-deep);
+    color: var(--color-white);
+    text-align: center;
+  }
+
+  .membership-success__inner {
+    max-width: 36rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .membership-success__icon {
+    color: var(--color-accent);
+    margin-bottom: var(--space-2);
+  }
+
+  .membership-success h1 {
+    color: var(--color-white);
+    font-size: clamp(1.8rem, 1.4rem + 1.8vw, 2.5rem);
+    margin-top: var(--space-1);
+  }
+
+  .membership-success .lede {
+    margin-top: var(--space-2);
+    max-width: 48ch;
+  }
+
+  .membership-success__details {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .membership-success__details dt {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-steel);
+  }
+
+  .membership-success__details dd {
+    margin: 0.25rem 0 0;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .membership-success__discount {
+    margin-top: var(--space-3);
+  }
+
+  .membership-success__ctas {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+  }
+
+  .membership-benefit {
+    max-width: 40rem;
+  }
+
+  .membership-benefit h2 {
+    margin-top: var(--space-1);
+    font-size: clamp(1.4rem, 1.15rem + 1vw, 1.75rem);
+  }
+
+  .membership-benefit .lede {
+    margin-top: var(--space-2);
+  }
+
+  .membership-benefit__note {
+    margin-top: var(--space-2);
+    color: var(--color-ink-muted);
+    font-size: 0.9rem;
+  }
+</style>

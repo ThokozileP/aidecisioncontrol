@@ -8,9 +8,11 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
+  /** Keeps internal/admin pages out of search results even though they're auth-gated — defense in depth, not the actual access control. */
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, SITE.url);
 const pageTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 ---
@@ -29,7 +31,7 @@ const pageTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />

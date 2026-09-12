@@ -1,0 +1,95 @@
+---
+import { TicketPercent, Users, BookOpenText, MessageSquareQuote, Rocket, Handshake } from 'lucide-react';
+import SectionHeading from '../SectionHeading.astro';
+
+const benefits = [
+  {
+    icon: TicketPercent,
+    eyebrow: 'Event Benefits',
+    title: '20% off Forum events',
+    description: 'Members receive a 20% discount on eligible AI Decision Control Forum event tickets.',
+  },
+  {
+    icon: Users,
+    eyebrow: 'Professional Community',
+    title: 'Connect with practitioners',
+    description:
+      'Engage with professionals working across AI governance, risk, compliance, safety and regulation.',
+  },
+  {
+    icon: BookOpenText,
+    eyebrow: 'Member Resources',
+    title: 'Access selected insights',
+    description:
+      'Receive access to selected Forum resources, research and practical AI governance materials.',
+  },
+  {
+    icon: MessageSquareQuote,
+    eyebrow: 'Contribute',
+    title: 'Shape the conversation',
+    description: 'Members can contribute insights, participate in discussions and support Forum initiatives.',
+  },
+  {
+    icon: Rocket,
+    eyebrow: 'Early Access',
+    title: 'Be first to know',
+    description: 'Receive early access to selected events, programmes and opportunities.',
+  },
+  {
+    icon: Handshake,
+    eyebrow: 'Collaboration',
+    title: 'Build meaningful connections',
+    description:
+      'Connect with professionals and experts tackling real-world AI decision-making challenges.',
+  },
+];
+---
+
+<section class="section section--alt">
+  <div class="wrapper">
+    <SectionHeading eyebrow="Why join" heading="Membership benefits" />
+    <div class="grid membership-benefits">
+      {
+        benefits.map(({ icon: Icon, eyebrow, title, description }) => (
+          <div class="card membership-benefit-card">
+            <span class="membership-benefit-card__icon" aria-hidden="true">
+              <Icon size={22} strokeWidth={1.75} />
+            </span>
+            <p class="tag">{eyebrow}</p>
+            <h3>{title}</h3>
+            <p>{description}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .membership-benefits {
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+
+  .membership-benefit-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .membership-benefit-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius);
+    background: rgba(21, 166, 223, 0.12);
+    color: var(--color-navy);
+    margin-bottom: 0.25rem;
+  }
+
+  .membership-benefit-card p:last-child {
+    color: var(--color-ink-muted);
+  }
+</style>

@@ -1,0 +1,116 @@
+---
+export const prerender = false;
+import { env } from 'cloudflare:workers';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MembershipSuccess from '../../components/membership/MembershipSuccess.astro';
+import { getMembershipKv, activateMembershipForSession, getMemberBySession } from '../../lib/membership/store';
+import { isMembershipActive } from '../../lib/membership/status';
+import { getStripeClient } from '../../lib/stripe';
+import { sendMembershipConfirmationEmail } from '../../lib/email/sendMembershipEmail';
+import { DRAFT_STORAGE_KEY } from '../../components/membership/formState';
+import type { MembershipRecord } from '../../lib/membership/types';
+
+type WorkerEnv = {
+  MEMBERSHIPS?: KVNamespace;
+  STRIPE_SECRET_KEY?: string;
+  RESEND_API_KEY?: string;
+  RESEND_FROM_EMAIL?: string;
+};
+
+const workerEnv = env as unknown as WorkerEnv;
+const sessionId = Astro.url.searchParams.get('session_id');
+
+let errorMessage: string | null = null;
+let record: MembershipRecord | null = null;
+
+if (!sessionId) {
+  errorMessage = 'No payment session was found. If you completed a payment, check your email for confirmation.';
+} else if (!workerEnv.STRIPE_SECRET_KEY) {
+  errorMessage = 'Payment processing is not configured.';
+} else {
+  try {
+    const kv = getMembershipKv(workerEnv);
+
+    const existing = await getMemberBySession(kv, sessionId);
+    if (existing && isMembershipActive(existing)) {
+      record = existing;
+    } else {
+      const stripe = getStripeClient(workerEnv.STRIPE_SECRET_KEY);
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+      if (session.payment_status !== 'paid') {
+        errorMessage = 'This payment has not completed yet. Please try again in a moment.';
+      } else {
+        const activation = await activateMembershipForSession(kv, {
+          stripeCheckoutSessionId: session.id,
+          stripeCustomerId: typeof session.customer === 'string' ? session.customer : session.customer?.id ?? null,
+          stripePaymentIntentId:
+            typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id ?? null,
+        });
+        record = activation.record;
+
+        // The webhook is the durable path for this — this is a best-effort
+        // send in case the webhook hasn't landed yet by the time the member
+        // is redirected back here. Only send when this call actually just
+        // activated the membership (never on an idempotent no-op), and a
+        // failed send must never turn a successfully-activated membership
+        // into an error page.
+        if (activation.activated) {
+          try {
+            await sendMembershipConfirmationEmail(workerEnv, record);
+          } catch (emailError) {
+            console.error('[membership success] Confirmation email failed (membership still activated)', emailError);
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error('[membership success] Could not confirm membership', error);
+    errorMessage = 'We could not confirm your membership automatically. If you were charged, contact us and we will resolve it.';
+  }
+}
+---
+
+<BaseLayout
+  title="Membership Confirmed"
+  description="Your AI Decision Control Forum Professional Membership has been activated."
+>
+  {
+    record && record.membershipId && record.startDate && record.expiryDate ? (
+      <MembershipSuccess
+        firstName={record.firstName}
+        membershipId={record.membershipId}
+        expiryDate={record.expiryDate}
+      />
+    ) : (
+      <section class="section">
+        <div class="wrapper membership-pending">
+          <p class="eyebrow">Membership</p>
+          <h1>We're confirming your membership.</h1>
+          <p class="lede">{errorMessage}</p>
+          <a class="button button--primary" href="/membership">Return to Membership</a>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+{record && (
+  <script is:inline define:vars={{ key: DRAFT_STORAGE_KEY }}>
+    try {
+      sessionStorage.removeItem(key);
+    } catch {
+      // ignore
+    }
+  </script>
+)}
+
+<style>
+  .membership-pending {
+    max-width: 34rem;
+  }
+
+  .membership-pending .lede {
+    margin: var(--space-2) 0 var(--space-3);
+  }
+</style>

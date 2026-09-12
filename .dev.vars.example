@@ -1,0 +1,26 @@
+# Copy this file to `.dev.vars` (gitignored) for local development with
+# `npm run dev`. In production these are set as Worker secrets/vars instead —
+# see README.md "Membership application" for the full setup checklist.
+
+# Stripe secret key (test mode: sk_test_..., live mode: sk_live_...).
+# Required to create checkout sessions. Get it from
+# https://dashboard.stripe.com/apikeys
+STRIPE_SECRET_KEY=sk_test_...
+
+# Signing secret for the /api/membership/webhook endpoint. When testing
+# locally with the Stripe CLI, run:
+#   stripe listen --forward-to localhost:4321/api/membership/webhook
+# and use the "whsec_..." secret it prints.
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Optional: enables outgoing confirmation emails via Resend
+# (https://resend.com). If unset, the membership flow still works — the
+# email step is skipped and a warning is logged instead.
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=AI Decision Control Forum <membership@aidecisioncontrol.org>
+
+# Required to access /admin/memberships (HTTP Basic Auth). Without both of
+# these set, the admin dashboard refuses all access — it never falls open.
+# Pick a strong, unique password; do not reuse one from elsewhere.
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=change-me

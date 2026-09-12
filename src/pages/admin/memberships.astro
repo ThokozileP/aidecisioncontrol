@@ -1,0 +1,174 @@
+---
+export const prerender = false;
+import { env } from 'cloudflare:workers';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getMembershipKv, listAllMembers } from '../../lib/membership/store';
+import { getDisplayStatus, isExpiringSoon, type DisplayStatus } from '../../lib/membership/status';
+import '../../styles/admin.css';
+
+const workerEnv = env as unknown as { MEMBERSHIPS?: KVNamespace };
+
+const STATUS_FILTERS: Array<DisplayStatus | 'All'> = ['All', 'Active', 'Pending', 'Expired', 'Payment Failed', 'Cancelled'];
+
+const query = (Astro.url.searchParams.get('q') ?? '').trim();
+const statusFilter = (Astro.url.searchParams.get('status') ?? 'All') as DisplayStatus | 'All';
+
+let loadError: string | null = null;
+let members: Awaited<ReturnType<typeof listAllMembers>> = [];
+
+try {
+  const kv = getMembershipKv(workerEnv);
+  members = await listAllMembers(kv);
+} catch (error) {
+  console.error('[admin memberships] Could not load members', error);
+  loadError = 'Membership storage is not configured. See README.md "Membership application".';
+}
+
+const now = new Date();
+
+const rows = members
+  .map((member) => ({ member, status: getDisplayStatus(member, now) }))
+  .sort((a, b) => new Date(b.member.createdAt).getTime() - new Date(a.member.createdAt).getTime());
+
+const totalMembers = rows.filter((r) => r.member.paymentStatus === 'paid').length;
+const activeMembers = rows.filter((r) => r.status === 'Active').length;
+const expiringSoon = rows.filter((r) => isExpiringSoon(r.member, now)).length;
+const expiredMembers = rows.filter((r) => r.status === 'Expired').length;
+
+const filteredRows = rows.filter(({ member, status }) => {
+  if (statusFilter !== 'All' && status !== statusFilter) return false;
+  if (!query) return true;
+  const haystack = `${member.firstName} ${member.lastName} ${member.email} ${member.organisation}`.toLowerCase();
+  return haystack.includes(query.toLowerCase());
+});
+
+function formatDate(iso: string | null): string {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function statusClass(status: DisplayStatus): string {
+  return status.toLowerCase().replace(/\s+/g, '-');
+}
+---
+
+<BaseLayout title="Membership Dashboard" description="Internal membership administration for the AI Decision Control Forum." noindex>
+  <section class="section admin-dashboard">
+    <div class="wrapper">
+      <p class="eyebrow">Admin</p>
+      <h1>Membership dashboard</h1>
+
+      {
+        loadError ? (
+          <p class="lede admin-dashboard__error">{loadError}</p>
+        ) : (
+          <>
+            <div class="admin-metrics">
+              <div class="admin-metric-card">
+                <p class="admin-metric-card__label">Total Members</p>
+                <p class="admin-metric-card__value">{totalMembers}</p>
+              </div>
+              <div class="admin-metric-card">
+                <p class="admin-metric-card__label">Active Members</p>
+                <p class="admin-metric-card__value">{activeMembers}</p>
+              </div>
+              <div class="admin-metric-card">
+                <p class="admin-metric-card__label">Expiring Soon</p>
+                <p class="admin-metric-card__value">{expiringSoon}</p>
+              </div>
+              <div class="admin-metric-card">
+                <p class="admin-metric-card__label">Expired</p>
+                <p class="admin-metric-card__value">{expiredMembers}</p>
+              </div>
+            </div>
+
+            <form class="admin-filters" method="get">
+              <label class="admin-filters__search">
+                <span class="visually-hidden">Search by name, email or organisation</span>
+                <input type="search" name="q" placeholder="Search name, email or organisation…" value={query} />
+              </label>
+              <label class="admin-filters__status">
+                <span class="visually-hidden">Filter by status</span>
+                <select name="status">
+                  {STATUS_FILTERS.map((option) => (
+                    <option value={option} selected={option === statusFilter}>
+                      {option === 'All' ? 'All statuses' : option}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button type="submit" class="button button--primary button--compact">
+                Filter
+              </button>
+              {(query || statusFilter !== 'All') && (
+                <a class="button button--ghost button--compact" href="/admin/memberships">
+                  Clear
+                </a>
+              )}
+              <a class="button button--secondary admin-filters__export" href="/admin/memberships/export.csv">
+                Export CSV
+              </a>
+            </form>
+
+            <p class="admin-dashboard__count">
+              Showing {filteredRows.length} of {rows.length} applications
+            </p>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Member</th>
+                    <th scope="col">Organisation</th>
+                    <th scope="col">Sector</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Membership ID</th>
+                    <th scope="col">Start</th>
+                    <th scope="col">Expires</th>
+                    <th scope="col">Stripe Reference</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredRows.map(({ member, status }) => (
+                    <tr>
+                      <td>
+                        <span class="admin-table__primary">{member.firstName} {member.lastName}</span>
+                        <span class="admin-table__secondary">{member.email}</span>
+                      </td>
+                      <td>{member.organisation}</td>
+                      <td>{member.sector}</td>
+                      <td>{member.country}</td>
+                      <td>
+                        <span class={`status-badge status-badge--${statusClass(status)}`}>{status}</span>
+                      </td>
+                      <td>{member.membershipId ?? '—'}</td>
+                      <td>{formatDate(member.startDate)}</td>
+                      <td>{formatDate(member.expiryDate)}</td>
+                      <td class="admin-table__mono">
+                        {member.stripeCustomerId ?? '—'}
+                        {member.stripePaymentIntentId && (
+                          <>
+                            <br />
+                            {member.stripePaymentIntentId}
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  {filteredRows.length === 0 && (
+                    <tr>
+                      <td colspan="9" class="admin-table__empty">
+                        No applications match this search/filter.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

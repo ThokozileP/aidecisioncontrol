@@ -1,0 +1,330 @@
+/* Styles for the membership application form (React island) and its
+   supporting fields. Scoped with a `membership-` / `field` / `option-group`
+   prefix rather than Astro's <style> scoping, since these classes are also
+   applied from React components. Reuses the site's existing design tokens
+   from global.css. */
+
+.membership-form {
+  margin-top: var(--space-4);
+}
+
+.membership-form__progress {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.membership-form__progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 3px solid var(--color-border);
+  color: var(--color-ink-muted);
+}
+
+.membership-form__progress-item--current,
+.membership-form__progress-item--complete {
+  border-bottom-color: var(--color-accent);
+  color: var(--color-navy-deep);
+}
+
+.membership-form__progress-number {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.membership-form__progress-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .membership-form__progress-label {
+    display: block;
+  }
+}
+
+.membership-form__panel {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .membership-form__panel {
+    padding: var(--space-4);
+  }
+}
+
+.membership-form__step-number {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-navy);
+  text-transform: uppercase;
+}
+
+.membership-form__step-title {
+  font-size: 1.4rem;
+  margin-top: 0.35rem;
+}
+
+.membership-form__step-description {
+  color: var(--color-ink-muted);
+  margin-top: 0.5rem;
+}
+
+.membership-form__step-body {
+  margin-top: var(--space-3);
+}
+
+.membership-form__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .membership-form__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.membership-form__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.membership-form__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.membership-form__next {
+  margin-left: auto;
+}
+
+/* Form fields */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field__label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-navy-deep);
+}
+
+.field__required {
+  color: var(--color-navy);
+}
+
+.field__hint {
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+  margin-top: -0.2rem;
+}
+
+.field__control {
+  font: inherit;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+.field__control:hover {
+  border-color: var(--color-steel);
+}
+
+.field__control[aria-invalid='true'] {
+  border-color: #c23b3b;
+}
+
+.field__error {
+  font-size: 0.82rem;
+  color: #c23b3b;
+  margin: 0;
+}
+
+/* Option groups (multi-select / single-select button lists) */
+
+.option-group {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option-group__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.option-group__item {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.option-group__item:hover:not(:disabled) {
+  border-color: var(--color-navy);
+}
+
+.option-group__item--selected {
+  background: var(--color-navy-deep);
+  border-color: var(--color-navy-deep);
+  color: var(--color-white);
+}
+
+.option-group__item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Checkboxes */
+
+.checkbox-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.checkbox-field__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.9rem;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.checkbox-field__row input {
+  margin-top: 0.2rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--color-navy-deep);
+  flex-shrink: 0;
+}
+
+/* Membership summary card */
+
+.membership-summary {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  background: var(--color-bg);
+}
+
+.membership-summary__price {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-navy-deep);
+  margin-top: 0.5rem;
+}
+
+.membership-summary__price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-ink-muted);
+  margin-left: 0.35rem;
+}
+
+.membership-summary__term {
+  font-weight: 600;
+  color: var(--color-navy);
+  margin-top: 0.2rem;
+}
+
+.membership-summary__benefits {
+  list-style: none;
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.membership-summary__benefits li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--color-ink);
+}
+
+.membership-summary__benefits svg {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* Terms */
+
+.membership-terms {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.membership-terms h3 {
+  font-size: 1rem;
+}
+
+.membership-terms p {
+  font-size: 0.88rem;
+  color: var(--color-ink-muted);
+}
+
+/* Payment error banner */
+
+.membership-error {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  background: #fdf1f1;
+  border: 1px solid #f0c4c4;
+  border-radius: var(--radius);
+  padding: var(--space-3);
+}
+
+.membership-error__icon {
+  color: #c23b3b;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.membership-error h3 {
+  font-size: 1rem;
+  color: #7a2323;
+}
+
+.membership-error p {
+  color: #7a2323;
+  margin: 0.35rem 0 0.75rem;
+  font-size: 0.9rem;
+}

@@ -8,11 +8,29 @@
 name = "aidecisioncontrol"
 compatibility_date = "2026-08-01"
 
+# The site moved from pure static assets to Astro's server output (see
+# astro.config.mjs) so the /membership flow can run real API routes
+# (Stripe checkout + webhook). The @astrojs/cloudflare adapter builds a
+# worker + client asset split into dist/server and dist/client, and writes
+# its own resolved deploy config to dist/server/wrangler.json (correct
+# `main`/`[assets]` paths for that layout) — `wrangler deploy` detects and
+# uses that generated file automatically ("Using redirected Wrangler
+# configuration"), so this file only needs to declare the bindings the app
+# actually uses (below); `main` and `[assets].directory`/`binding` are
+# resolved by the adapter and don't need to be set here.
 [build]
 command = "npm run build"
 
 [assets]
-directory = "./dist"
 # Without this, Workers assets return a generic Cloudflare 404 instead of
-# our branded dist/404.html for any unmatched path.
+# our branded custom 404 page for any unmatched path.
 not_found_handling = "404-page"
+
+# Membership applications/records are stored in Workers KV. `astro dev` /
+# `wrangler dev` simulate this namespace locally with no setup needed, but
+# the placeholder id below MUST be replaced with a real namespace id before
+# deploying to production: run `npx wrangler kv namespace create MEMBERSHIPS`
+# and paste the returned id here. See README.md "Membership application".
+[[kv_namespaces]]
+binding = "MEMBERSHIPS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"

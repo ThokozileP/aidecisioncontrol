@@ -8,6 +8,7 @@ export const mainNav: NavItem[] = [
   { label: 'Founding Circle', href: '/founding-circle' },
   { label: 'Events', href: '/events' },
   { label: 'Perspectives', href: '/perspectives' },
+  { label: 'Membership', href: '/membership' },
   { label: 'About', href: '/about' },
 ];
 
@@ -17,5 +18,6 @@ export const footerNav: NavItem[] = [
   { label: 'Founding Circle', href: '/founding-circle' },
   { label: 'Events', href: '/events' },
   { label: 'Perspectives', href: '/perspectives' },
+  { label: 'Membership', href: '/membership' },
   { label: 'About', href: '/about' },
 ];

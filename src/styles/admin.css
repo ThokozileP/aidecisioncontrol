@@ -1,0 +1,168 @@
+/* Internal membership admin dashboard (/admin/memberships). Reuses the
+   site's existing design tokens from global.css — this is an operations
+   tool, not a new visual system. */
+
+.admin-dashboard h1 {
+  font-size: clamp(1.8rem, 1.4rem + 1.8vw, 2.5rem);
+  margin-top: var(--space-1);
+}
+
+.admin-dashboard__error {
+  margin-top: var(--space-3);
+  color: #7a2323;
+}
+
+.admin-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.admin-metric-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+}
+
+.admin-metric-card__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+}
+
+.admin-metric-card__value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-navy-deep);
+  margin-top: 0.35rem;
+}
+
+.admin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.admin-filters__search input,
+.admin-filters__status select {
+  font: inherit;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+.admin-filters__search input {
+  min-width: 16rem;
+}
+
+.admin-filters__export {
+  margin-left: auto;
+}
+
+.admin-dashboard__count {
+  margin-top: var(--space-3);
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+.admin-table-wrap {
+  margin-top: var(--space-2);
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-white);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-table th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+  background: var(--color-bg);
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table__primary {
+  display: block;
+  font-weight: 600;
+  color: var(--color-navy-deep);
+}
+
+.admin-table__secondary {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-ink-muted);
+}
+
+.admin-table__mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+}
+
+.admin-table__empty {
+  text-align: center;
+  color: var(--color-ink-muted);
+  padding: var(--space-3);
+}
+
+.status-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.status-badge--active {
+  background: rgba(21, 166, 223, 0.15);
+  color: var(--color-navy);
+}
+
+.status-badge--pending {
+  background: rgba(8, 43, 85, 0.08);
+  color: var(--color-navy-deep);
+}
+
+.status-badge--expired {
+  background: rgba(115, 151, 170, 0.2);
+  color: var(--color-ink-muted);
+}
+
+.status-badge--cancelled {
+  background: rgba(115, 151, 170, 0.2);
+  color: var(--color-ink-muted);
+}
+
+.status-badge--payment-failed {
+  background: rgba(194, 59, 59, 0.12);
+  color: #a12d2d;
+}
