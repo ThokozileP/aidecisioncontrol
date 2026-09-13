@@ -36,6 +36,16 @@ binding = "ASSETS"
 # our branded custom 404 page for any unmatched path.
 not_found_handling = "404-page"
 
+# Workers Logs: captures invocation logs (including console.log/error from
+# the membership API routes and webhook handler) and persists them to the
+# Cloudflare dashboard so they're queryable after the fact — useful given
+# `astro dev`'s worker sandbox doesn't reliably surface console output to
+# the terminal (see the membership webhook/checkout routes' error logging).
+[observability.logs]
+enabled = true
+invocation_logs = true
+persist = true
+
 # Membership applications/records are stored in Workers KV. `astro dev` /
 # `wrangler dev` simulate this namespace locally with no setup needed, but
 # the placeholder id below MUST be replaced with a real namespace id before
