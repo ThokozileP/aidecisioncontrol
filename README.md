@@ -66,11 +66,16 @@ Because the deploy step is `wrangler deploy` rather than `wrangler pages deploy`
 site is served as a Worker. Most pages are still prerendered static HTML, but the
 membership flow (`/membership`, `/admin/*`, `/api/membership/*`) needs real server-side
 routes, so the site runs in Astro's server output mode via the `@astrojs/cloudflare`
-adapter. The adapter builds a worker + static-asset split (`dist/server`, `dist/client`)
-and writes its own resolved deploy config to `dist/server/wrangler.json`; `wrangler
-deploy` detects and uses that automatically ("Using redirected Wrangler configuration"),
-so this repo's `wrangler.toml` only needs to declare the bindings the app actually uses
-(KV, secrets) — not `main` or `[assets]` paths.
+adapter, which builds a worker + static-asset split (`dist/server`, `dist/client`).
+`wrangler.toml` sets `main = "@astrojs/cloudflare/entrypoints/server"` — the adapter's
+own stable package entrypoint, not a path under `dist/` — specifically so `wrangler
+deploy` can resolve it on a clean checkout *before* the Build step has produced anything;
+see the comment in `wrangler.toml` for the exact failure this avoids (an earlier version
+pointed `main` at a `dist/server/...` path, which broke the very first production deploy
+of the membership feature with "Cannot use assets with a binding in an assets-only
+Worker"). Both the Build and Deploy commands above must stay configured as separate
+steps — `dist/` needs to already exist by the time the Deploy step's `wrangler deploy`
+process starts.
 
 `wrangler` is pinned as a devDependency so Cloudflare's build doesn't fetch a fresh copy
 on every deploy. To deploy manually from the CLI: `npm run build && npx wrangler deploy`.
