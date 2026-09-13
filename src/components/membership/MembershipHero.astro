@@ -1,7 +1,8 @@
 ---
-import { MEMBERSHIP_ANNUAL_FEE_CENTS } from '../../lib/membership/types';
+import { MEMBERSHIP_ANNUAL_FEE_CENTS, MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS, formatEuro } from '../../lib/membership/types';
 
-const feeDisplay = `€${(MEMBERSHIP_ANNUAL_FEE_CENTS / 100).toFixed(0)}`;
+const monthlyDisplay = formatEuro(MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS);
+const annualDisplay = formatEuro(MEMBERSHIP_ANNUAL_FEE_CENTS);
 ---
 
 <section class="section membership-hero">
@@ -18,7 +19,8 @@ const feeDisplay = `€${(MEMBERSHIP_ANNUAL_FEE_CENTS / 100).toFixed(0)}`;
     </p>
 
     <div class="membership-hero__price" role="group" aria-label="Membership price">
-      <span class="membership-hero__price-amount">{feeDisplay}<span class="membership-hero__price-period">/ year</span></span>
+      <span class="membership-hero__price-amount">{monthlyDisplay}<span class="membership-hero__price-period">/month</span></span>
+      <span class="membership-hero__price-billing">Billed annually at {annualDisplay}</span>
       <span class="membership-hero__price-note">Includes 20% off eligible Forum events</span>
     </div>
 
@@ -79,6 +81,12 @@ const feeDisplay = `€${(MEMBERSHIP_ANNUAL_FEE_CENTS / 100).toFixed(0)}`;
     font-weight: 500;
     color: var(--color-steel);
     margin-left: 0.35rem;
+  }
+
+  .membership-hero__price-billing {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-white);
   }
 
   .membership-hero__price-note {

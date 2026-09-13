@@ -77,9 +77,10 @@ on every deploy. To deploy manually from the CLI: `npm run build && npx wrangler
 
 ## Membership administration
 
-`/membership` is a paid Professional Membership application (€95/year, 12 months from
-activation) built with Stripe Checkout. `/admin/memberships` is the internal dashboard
-for Forum administrators to view, search and export that data.
+`/membership` is a paid Professional Membership application — €7.99/month, billed
+annually as a single €95.88 payment (not a recurring subscription), covering 12 months
+from activation — built with Stripe Checkout. `/admin/memberships` is the internal
+dashboard for Forum administrators to view, search and export that data.
 
 ### Setup checklist
 
@@ -95,9 +96,10 @@ for Forum administrators to view, search and export that data.
    Stripe dashboard at `<site>/api/membership/webhook` subscribed to three events —
    `checkout.session.completed`, `checkout.session.expired`, and
    `checkout.session.async_payment_failed` — and set its signing secret as
-   `STRIPE_WEBHOOK_SECRET`. The checkout amount (€95.00 EUR) and product name are fixed
-   server-side in `src/lib/membership/types.ts`; nothing about the price is ever trusted
-   from the client.
+   `STRIPE_WEBHOOK_SECRET`. The checkout amount (€95.88 EUR, one annual payment — displayed
+   in the UI as €7.99/month billed annually, never configured as a recurring subscription)
+   and product name are fixed server-side in `src/lib/membership/types.ts`; nothing about
+   the price is ever trusted from the client.
 3. **Email (optional)** — set `RESEND_API_KEY` and `RESEND_FROM_EMAIL` to send the
    post-activation confirmation email via [Resend](https://resend.com). Without it,
    membership activation still works; the email step just logs a warning and skips —
@@ -127,8 +129,8 @@ A membership is **never** marked active except in direct response to a confirmed
 event:
 
 1. Submitting the form creates a record with `paymentStatus: 'pending'` and starts a
-   Stripe Checkout Session (server-computed €95.00 EUR — the client cannot influence
-   price or currency).
+   Stripe Checkout Session (server-computed €95.88 EUR, one annual payment — the client
+   cannot influence price or currency).
 2. Stripe's `checkout.session.completed` webhook (verified via the signing secret, using
    Web Crypto since Cloudflare Workers have no Node `crypto` module — see
    `src/lib/stripe.ts`) is the durable path that flips `paymentStatus` to `'paid'`,

@@ -2,7 +2,13 @@ import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { membershipApplicationSchema } from '../../../lib/membership/schema';
 import { saveApplication, findReusableApplication, getMembershipKv } from '../../../lib/membership/store';
-import { MEMBERSHIP_ANNUAL_FEE_CENTS, MEMBERSHIP_CURRENCY, MEMBERSHIP_PRODUCT_NAME } from '../../../lib/membership/types';
+import {
+  MEMBERSHIP_ANNUAL_FEE_CENTS,
+  MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS,
+  MEMBERSHIP_CURRENCY,
+  MEMBERSHIP_PRODUCT_NAME,
+  formatEuro,
+} from '../../../lib/membership/types';
 import { getStripeClient } from '../../../lib/stripe';
 import { SITE } from '../../../consts';
 
@@ -69,6 +75,10 @@ export const POST: APIRoute = async ({ request }) => {
 
   // The client determines nothing about price — the amount charged is fixed
   // here, server-side, regardless of anything submitted by the browser.
+  // `mode: 'payment'` is a single one-time charge, not a subscription —
+  // €95.88 is billed once, up front, covering the full 12-month membership.
+  // €7.99/month is communicated for pricing context only; it is never
+  // configured as a recurring monthly amount.
   try {
     const session = await stripe.checkout.sessions.create(
       {
@@ -83,7 +93,7 @@ export const POST: APIRoute = async ({ request }) => {
               unit_amount: MEMBERSHIP_ANNUAL_FEE_CENTS,
               product_data: {
                 name: MEMBERSHIP_PRODUCT_NAME,
-                description: 'Professional Membership — 12 months from activation.',
+                description: `Professional Membership — ${formatEuro(MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS)}/month, billed annually at ${formatEuro(MEMBERSHIP_ANNUAL_FEE_CENTS)}. One annual payment covering 12 months from activation.`,
               },
             },
           },

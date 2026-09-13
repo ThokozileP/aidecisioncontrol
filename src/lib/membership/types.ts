@@ -1,10 +1,23 @@
 import type { MembershipApplicationInput } from './schema';
 
-export const MEMBERSHIP_ANNUAL_FEE_CENTS = 9500;
+/**
+ * Professional Membership is billed as ONE annual payment of €95.88 — not a
+ * recurring monthly subscription. €7.99/month is shown throughout the UI as
+ * the equivalent monthly rate for pricing communication only; Stripe is
+ * never configured with recurring/subscription billing (see
+ * src/pages/api/membership/checkout.ts, `mode: 'payment'`).
+ */
+export const MEMBERSHIP_ANNUAL_FEE_CENTS = 9588;
+export const MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS = 799;
 export const MEMBERSHIP_CURRENCY = 'eur';
 export const MEMBERSHIP_PRODUCT_NAME = 'AI Decision Control Forum — Professional Membership';
 export const MEMBERSHIP_DURATION_MONTHS = 12;
 export const MEMBERSHIP_TYPE = 'Professional Member' as const;
+
+/** Formats a cents amount as "€X.XX" — the single source of truth for how membership prices are displayed. */
+export function formatEuro(cents: number): string {
+  return `€${(cents / 100).toFixed(2)}`;
+}
 
 /** Where a payment attempt currently stands. Set only from confirmed Stripe events. */
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'cancelled';

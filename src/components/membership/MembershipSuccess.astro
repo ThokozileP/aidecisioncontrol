@@ -1,5 +1,6 @@
 ---
 import { CheckCircle2 } from 'lucide-react';
+import { MEMBERSHIP_ANNUAL_FEE_CENTS, MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS, formatEuro } from '../../lib/membership/types';
 
 interface Props {
   firstName: string;
@@ -13,6 +14,8 @@ const formattedExpiry = new Date(expiryDate).toLocaleDateString('en-GB', {
   month: 'long',
   year: 'numeric',
 });
+const monthlyDisplay = formatEuro(MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS);
+const annualDisplay = formatEuro(MEMBERSHIP_ANNUAL_FEE_CENTS);
 ---
 
 <section class="section membership-success">
@@ -30,12 +33,19 @@ const formattedExpiry = new Date(expiryDate).toLocaleDateString('en-GB', {
 
     <dl class="membership-success__details">
       <div>
-        <dt>Membership ID</dt>
-        <dd>{membershipId}</dd>
+        <dt>Membership</dt>
+        <dd>Professional Membership</dd>
       </div>
       <div>
-        <dt>Membership</dt>
-        <dd>Professional Member</dd>
+        <dt>Price</dt>
+        <dd>
+          {monthlyDisplay}<span class="membership-success__price-period">/month</span>
+          <span class="membership-success__price-note">Billed annually at {annualDisplay}</span>
+        </dd>
+      </div>
+      <div>
+        <dt>Membership ID</dt>
+        <dd>{membershipId}</dd>
       </div>
       <div>
         <dt>Valid until</dt>
@@ -116,6 +126,21 @@ const formattedExpiry = new Date(expiryDate).toLocaleDateString('en-GB', {
     margin: 0.25rem 0 0;
     font-weight: 700;
     font-size: 1.1rem;
+  }
+
+  .membership-success__price-period {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--color-steel);
+    margin-left: 0.2rem;
+  }
+
+  .membership-success__price-note {
+    display: block;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--color-steel);
+    margin-top: 0.15rem;
   }
 
   .membership-success__discount {

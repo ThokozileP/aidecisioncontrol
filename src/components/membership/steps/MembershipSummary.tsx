@@ -1,5 +1,10 @@
 import { Check } from 'lucide-react';
-import { MEMBERSHIP_ANNUAL_FEE_CENTS, MEMBERSHIP_DURATION_MONTHS } from '../../../lib/membership/types';
+import {
+  MEMBERSHIP_ANNUAL_FEE_CENTS,
+  MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS,
+  MEMBERSHIP_DURATION_MONTHS,
+  formatEuro,
+} from '../../../lib/membership/types';
 
 const BENEFITS = [
   '20% discount on eligible Forum events',
@@ -11,15 +16,17 @@ const BENEFITS = [
 ];
 
 export function MembershipSummary() {
-  const feeDisplay = `€${(MEMBERSHIP_ANNUAL_FEE_CENTS / 100).toFixed(0)}`;
+  const monthlyDisplay = formatEuro(MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS);
+  const annualDisplay = formatEuro(MEMBERSHIP_ANNUAL_FEE_CENTS);
 
   return (
     <div className="membership-summary">
       <p className="tag">Professional Membership</p>
       <p className="membership-summary__price">
-        {feeDisplay}
-        <span>/ year</span>
+        {monthlyDisplay}
+        <span>/month</span>
       </p>
+      <p className="membership-summary__billing">Billed annually at {annualDisplay}</p>
       <p className="membership-summary__term">{MEMBERSHIP_DURATION_MONTHS}-month membership</p>
       <ul className="membership-summary__benefits">
         {BENEFITS.map((benefit) => (
