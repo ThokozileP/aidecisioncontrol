@@ -52,33 +52,42 @@ frontmatter — it will appear automatically on `/perspectives` and get its own
 ## Cloudflare deployment
 
 This repository is connected to Cloudflare as a **Workers Build** (not the classic
-Cloudflare Pages product) — pushing to `main` triggers Cloudflare to run the project's
-configured build command, then its deploy command:
+Cloudflare Pages product) — pushing to `main` triggers Cloudflare to run a configured
+pipeline command.
 
-| Setting | Value |
-| --- | --- |
-| Build command | `npm run build` |
-| Deploy command | `npx wrangler deploy` |
-| Root directory | `/` |
-| Node version | 20+ (project requires `>=20.3.0`) |
+**The dashboard's "Deploy command" MUST run the build first, in one line:**
 
-Because the deploy step is `wrangler deploy` rather than `wrangler pages deploy`, the
-site is served as a Worker. Most pages are still prerendered static HTML, but the
-membership flow (`/membership`, `/admin/*`, `/api/membership/*`) needs real server-side
-routes, so the site runs in Astro's server output mode via the `@astrojs/cloudflare`
-adapter, which builds a worker + static-asset split (`dist/server`, `dist/client`).
-`wrangler.toml` sets `main = "@astrojs/cloudflare/entrypoints/server"` — the adapter's
-own stable package entrypoint, not a path under `dist/` — specifically so `wrangler
-deploy` can resolve it on a clean checkout *before* the Build step has produced anything;
-see the comment in `wrangler.toml` for the exact failure this avoids (an earlier version
-pointed `main` at a `dist/server/...` path, which broke the very first production deploy
-of the membership feature with "Cannot use assets with a binding in an assets-only
-Worker"). Both the Build and Deploy commands above must stay configured as separate
-steps — `dist/` needs to already exist by the time the Deploy step's `wrangler deploy`
-process starts.
+```
+npm run build && npx wrangler deploy
+```
+
+This matters more than it looks. Two production deploys of the membership feature
+failed before landing on this: the actual deploy logs showed only `Executing user
+deploy command: npx wrangler deploy` with no build step at all, meaning `dist/` never
+existed when `wrangler` started — whatever the dashboard's separate "Build command"
+field is set to, Cloudflare was not running it before this deploy command. If your
+dashboard's Deploy command is currently just `npx wrangler deploy`, change it to the
+line above (Workers & Pages → this project → Settings → Build; root directory `/`,
+Node version 20+ per `engines` in `package.json`).
+
+Why this matters for `wrangler.toml`: most pages are still prerendered static HTML, but
+the membership flow (`/membership`, `/admin/*`, `/api/membership/*`) needs real
+server-side routes, so the site runs in Astro's server output mode via the
+`@astrojs/cloudflare` adapter, which builds a worker + static-asset split
+(`dist/server`, `dist/client`) and writes its own resolved deploy config to
+`dist/server/wrangler.json`. `wrangler deploy` picks that up automatically ("Using
+redirected Wrangler configuration") **only if `dist/` already exists at the moment
+`wrangler` starts** — which is exactly why the build must run as a genuinely separate,
+already-finished process before `wrangler deploy` starts, not something `wrangler
+deploy` triggers itself. Every alternative was tried and ruled out (see `wrangler.toml`'s
+own comment for the two different ways setting `main` explicitly breaks either `astro
+build` itself or `wrangler deploy`) — don't reintroduce `main`, `[assets].directory`, or
+a `[build]` table into `wrangler.toml` without reading that comment first.
 
 `wrangler` is pinned as a devDependency so Cloudflare's build doesn't fetch a fresh copy
-on every deploy. To deploy manually from the CLI: `npm run build && npx wrangler deploy`.
+on every deploy. To deploy manually from the CLI: `npm run build && npx wrangler deploy`
+(as two commands — do not merge them into a single `wrangler deploy` invocation that
+tries to build itself).
 
 ## Membership administration
 

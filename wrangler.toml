@@ -1,37 +1,31 @@
-# This project deploys as a Cloudflare "Workers Build": the dashboard runs
-# a Build command (`npm run build`) and a Deploy command (`npx wrangler
-# deploy`) as two separate pipeline steps — see README.md "Cloudflare
-# deployment".
+# This project deploys as a Cloudflare "Workers Build".
+#
+# IMPORTANT — the dashboard's "Deploy command" MUST run the build before
+# `wrangler deploy`, in one shell line, e.g.:
+#
+#   npm run build && npx wrangler deploy
+#
+# Two production deploys have now failed because that wasn't true — the
+# actual deploy logs showed only "Executing user deploy command: npx
+# wrangler deploy", no build step at all, meaning dist/ never existed when
+# wrangler started. If the dashboard's "Deploy command" is currently just
+# `npx wrangler deploy` (with a separate "Build command" field left empty,
+# or one Cloudflare isn't actually running before deploy), change it to the
+# line above. See README.md "Cloudflare deployment" for the full story and
+# every dead end already ruled out — do not re-attempt setting `main` or
+# `[assets].directory` explicitly in this file without reading that first;
+# every variant tried breaks either `astro build` itself or `wrangler
+# deploy`, in ways that are not obvious from the error message alone.
+#
+# With the build genuinely completed first, `wrangler deploy` picks up the
+# adapter's own generated dist/server/wrangler.json automatically ("Using
+# redirected Wrangler configuration") — which is why `main` and
+# `[assets].directory` are deliberately NOT set below. This file only needs
+# to declare the bindings the app actually uses.
 name = "aidecisioncontrol"
 compatibility_date = "2026-08-01"
 
-# The site moved from pure static assets to Astro's server output (see
-# astro.config.mjs) so the /membership flow can run real API routes
-# (Stripe checkout + webhook). The @astrojs/cloudflare adapter's Vite-based
-# build writes the actual worker + manifest into dist/server, but that path
-# is build-generated and its exact contents are an implementation detail —
-# `main` below points at the adapter's own stable package entrypoint
-# instead, which wraps whatever the build produced. This one line matters:
-#
-#   main = "@astrojs/cloudflare/entrypoints/server"
-#
-# Do NOT change this to a `dist/server/...` path. It resolves inside
-# node_modules and exists from `npm install` alone, before any build runs —
-# unlike a `dist/` path, which does not exist yet on a clean checkout. That
-# distinction is the whole reason this line is written this way: `wrangler
-# deploy` decides whether it's deploying "a Worker" or "assets only" by
-# checking whether `main` resolves *before* running a build, and never
-# re-checks afterwards. Point `main` at a `dist/` path (or add a `[build]`
-# table here to build it inline) and that check fails on a clean checkout —
-# wrangler locks in "assets-only" mode, then the `[[assets]]` binding below
-# (which requires a Worker) fails with "Cannot use assets with a binding in
-# an assets-only Worker". This exact failure mode is what broke the first
-# production deploy of the membership feature.
-main = "@astrojs/cloudflare/entrypoints/server"
-
 [assets]
-directory = "./dist/client"
-binding = "ASSETS"
 # Without this, Workers assets return a generic Cloudflare 404 instead of
 # our branded custom 404 page for any unmatched path.
 not_found_handling = "404-page"
