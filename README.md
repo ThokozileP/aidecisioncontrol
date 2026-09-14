@@ -52,42 +52,44 @@ frontmatter — it will appear automatically on `/perspectives` and get its own
 ## Cloudflare deployment
 
 This repository is connected to Cloudflare as a **Workers Build** (not the classic
-Cloudflare Pages product) — pushing to `main` triggers Cloudflare to run a configured
-pipeline command.
+Cloudflare Pages product). The dashboard's pipeline (Workers & Pages → this project →
+Settings → Build) is configured as:
 
-**The dashboard's "Deploy command" MUST run the build first, in one line:**
+| Setting | Value |
+| --- | --- |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | `/` |
+| Node version | 20+ (project requires `>=20.3.0`, per `engines` in `package.json`) |
 
-```
-npm run build && npx wrangler deploy
-```
-
-This matters more than it looks. Two production deploys of the membership feature
-failed before landing on this: the actual deploy logs showed only `Executing user
-deploy command: npx wrangler deploy` with no build step at all, meaning `dist/` never
-existed when `wrangler` started — whatever the dashboard's separate "Build command"
-field is set to, Cloudflare was not running it before this deploy command. If your
-dashboard's Deploy command is currently just `npx wrangler deploy`, change it to the
-line above (Workers & Pages → this project → Settings → Build; root directory `/`,
-Node version 20+ per `engines` in `package.json`).
-
-Why this matters for `wrangler.toml`: most pages are still prerendered static HTML, but
-the membership flow (`/membership`, `/admin/*`, `/api/membership/*`) needs real
-server-side routes, so the site runs in Astro's server output mode via the
-`@astrojs/cloudflare` adapter, which builds a worker + static-asset split
-(`dist/server`, `dist/client`) and writes its own resolved deploy config to
-`dist/server/wrangler.json`. `wrangler deploy` picks that up automatically ("Using
-redirected Wrangler configuration") **only if `dist/` already exists at the moment
-`wrangler` starts** — which is exactly why the build must run as a genuinely separate,
-already-finished process before `wrangler deploy` starts, not something `wrangler
-deploy` triggers itself. Every alternative was tried and ruled out (see `wrangler.toml`'s
-own comment for the two different ways setting `main` explicitly breaks either `astro
-build` itself or `wrangler deploy`) — don't reintroduce `main`, `[assets].directory`, or
-a `[build]` table into `wrangler.toml` without reading that comment first.
+These run as two genuinely separate steps — confirmed from an actual production deploy
+log, not assumed. Most pages are still prerendered static HTML, but the membership flow
+(`/membership`, `/admin/*`, `/api/membership/*`) needs real server-side routes, so the
+site runs in Astro's server output mode via the `@astrojs/cloudflare` adapter, which
+builds a worker + static-asset split (`dist/server`, `dist/client`) and writes its own
+resolved deploy config to `dist/server/wrangler.json`. `wrangler deploy` picks that up
+automatically ("Using redirected Wrangler configuration") once `dist/` already exists —
+true here because the Build step above finishes first. This is why `wrangler.toml`
+deliberately does **not** set `main` or `[assets].directory` itself: getting this site's
+`main` to resolve correctly, in every case wrangler needs it to (inside `astro build`'s
+own Vite plugin *and* inside `wrangler deploy`'s pre-build validation, which run at
+different times relative to when `dist/` exists), turned out to have no single value
+that satisfies both — every explicit value tried broke one or the other. Don't
+reintroduce `main` or `[assets].directory` without a concrete failing deploy log in hand.
 
 `wrangler` is pinned as a devDependency so Cloudflare's build doesn't fetch a fresh copy
 on every deploy. To deploy manually from the CLI: `npm run build && npx wrangler deploy`
-(as two commands — do not merge them into a single `wrangler deploy` invocation that
-tries to build itself).
+(as two separate commands, matching the dashboard pipeline — don't merge them into one
+`wrangler deploy` invocation that tries to build itself; that reintroduces the same
+resolution-order problem).
+
+### KV namespace auto-provisioning
+
+`wrangler.toml`'s `[[kv_namespaces]]` entry for `MEMBERSHIPS` deliberately has no `id`.
+Cloudflare auto-provisions a real namespace for any binding whose `id` is missing on
+`wrangler deploy` ("Resources provisioned, continuing with deployment..." in the deploy
+log) — the same mechanism Astro's own `SESSION` binding already relies on. No manual
+`wrangler kv namespace create` step is needed; the first successful deploy creates it.
 
 ## Membership administration
 
@@ -98,12 +100,12 @@ dashboard for Forum administrators to view, search and export that data.
 
 ### Setup checklist
 
-1. **Cloudflare KV** — applications and memberships are stored in one KV namespace.
-   Create it with `npx wrangler kv namespace create MEMBERSHIPS` and paste the returned
-   id into `wrangler.toml`'s `[[kv_namespaces]]` block (it ships with a placeholder id
-   that must be replaced before deploying — `astro dev`/`wrangler dev` simulate the
-   namespace locally with no setup needed). There is no other database in this project;
-   this is the only place membership data lives.
+1. **Cloudflare KV** — applications and memberships are stored in one KV namespace,
+   declared in `wrangler.toml` with no `id` — Cloudflare auto-provisions a real one on
+   the first production `wrangler deploy` (see "KV namespace auto-provisioning" above).
+   `astro dev`/`wrangler dev` simulate the namespace locally with no setup needed either.
+   There is no other database in this project; this is the only place membership data
+   lives.
 2. **Stripe** — set `STRIPE_SECRET_KEY` as a Worker secret in production
    (`npx wrangler secret put STRIPE_SECRET_KEY`) and in a local `.dev.vars` file for
    development (copy `.dev.vars.example`). Then register a webhook endpoint in the

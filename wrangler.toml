@@ -1,27 +1,17 @@
-# This project deploys as a Cloudflare "Workers Build".
-#
-# IMPORTANT — the dashboard's "Deploy command" MUST run the build before
-# `wrangler deploy`, in one shell line, e.g.:
-#
-#   npm run build && npx wrangler deploy
-#
-# Two production deploys have now failed because that wasn't true — the
-# actual deploy logs showed only "Executing user deploy command: npx
-# wrangler deploy", no build step at all, meaning dist/ never existed when
-# wrangler started. If the dashboard's "Deploy command" is currently just
-# `npx wrangler deploy` (with a separate "Build command" field left empty,
-# or one Cloudflare isn't actually running before deploy), change it to the
-# line above. See README.md "Cloudflare deployment" for the full story and
-# every dead end already ruled out — do not re-attempt setting `main` or
-# `[assets].directory` explicitly in this file without reading that first;
-# every variant tried breaks either `astro build` itself or `wrangler
-# deploy`, in ways that are not obvious from the error message alone.
+# This project deploys as a Cloudflare "Workers Build", with Build command
+# `npm run build` and Deploy command `npx wrangler deploy` configured as two
+# genuinely separate dashboard-configured pipeline steps (Settings → Build)
+# — confirmed correct; don't second-guess this again without fresh evidence
+# from an actual deploy log.
 #
 # With the build genuinely completed first, `wrangler deploy` picks up the
 # adapter's own generated dist/server/wrangler.json automatically ("Using
 # redirected Wrangler configuration") — which is why `main` and
-# `[assets].directory` are deliberately NOT set below. This file only needs
-# to declare the bindings the app actually uses.
+# `[assets].directory` are deliberately NOT set below. See README.md
+# "Cloudflare deployment" for the two ways setting them explicitly was
+# tried and broke either `astro build` itself or `wrangler deploy` — don't
+# re-attempt that without reading it first. This file only needs to declare
+# the bindings the app actually uses.
 name = "aidecisioncontrol"
 compatibility_date = "2026-08-01"
 
@@ -40,11 +30,13 @@ enabled = true
 invocation_logs = true
 persist = true
 
-# Membership applications/records are stored in Workers KV. `astro dev` /
-# `wrangler dev` simulate this namespace locally with no setup needed, but
-# the placeholder id below MUST be replaced with a real namespace id before
-# deploying to production: run `npx wrangler kv namespace create MEMBERSHIPS`
-# and paste the returned id here. See README.md "Membership application".
+# Membership applications/records are stored in Workers KV. No `id` is set
+# here on purpose: wrangler auto-provisions a real KV namespace for any
+# binding whose `id` is missing/empty on `wrangler deploy` ("Resources
+# provisioned, continuing with deployment...") — the same mechanism that
+# already auto-provisioned the unrelated `SESSION` binding below (an
+# Astro-internal feature this adapter enables automatically). `astro dev` /
+# `wrangler dev` simulate this namespace locally with no setup needed
+# either way. See README.md "Membership application".
 [[kv_namespaces]]
 binding = "MEMBERSHIPS"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
