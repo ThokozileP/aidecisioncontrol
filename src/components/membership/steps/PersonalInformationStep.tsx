@@ -1,4 +1,4 @@
-import { TextField, SelectField } from '../ui/fields';
+import { TextField, DatalistField } from '../ui/fields';
 import { COUNTRIES } from '../../../lib/membership/options';
 import type { MembershipDraft, FieldErrors } from '../formState';
 
@@ -39,13 +39,15 @@ export function PersonalInformationStep({ draft, errors, update }: Props) {
         autoComplete="email"
         error={errors.email}
       />
-      <SelectField
+      <DatalistField
         label="Country"
         name="country"
         value={draft.country}
         onChange={(v) => update('country', v)}
         options={COUNTRIES}
         required
+        autoComplete="country-name"
+        hint="Start typing to search, rather than scrolling a long list."
         error={errors.country}
       />
       <TextField

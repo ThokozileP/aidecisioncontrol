@@ -1,37 +1,22 @@
 ---
-import { MEMBERSHIP_ANNUAL_FEE_CENTS, MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS, formatEuro } from '../../lib/membership/types';
-
-const monthlyDisplay = formatEuro(MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS);
-const annualDisplay = formatEuro(MEMBERSHIP_ANNUAL_FEE_CENTS);
 ---
 
 <section class="section membership-hero">
   <div class="wrapper membership-hero__inner">
     <p class="eyebrow">Membership</p>
     <h1>Join the AI Decision Control Forum</h1>
-    <p class="membership-hero__subhead">
-      Become part of a global community shaping the future of AI decision-making.
-    </p>
     <p class="lede membership-hero__lede">
-      The AI Decision Control Forum brings together practitioners, researchers,
-      policymakers and professionals working across AI governance, risk, compliance,
-      safety and regulation.
+      For practitioners, researchers, policymakers and professionals working across AI
+      governance, risk, compliance, safety and regulation.
     </p>
-
-    <div class="membership-hero__price" role="group" aria-label="Membership price">
-      <span class="membership-hero__price-amount">{monthlyDisplay}<span class="membership-hero__price-period">/month</span></span>
-      <span class="membership-hero__price-billing">Billed annually at {annualDisplay}</span>
-      <span class="membership-hero__price-note">Includes 20% off eligible Forum events</span>
-    </div>
-
-    <a class="button button--primary membership-hero__cta" href="#membership-form">Become a Member</a>
   </div>
 </section>
 
 <style>
   .membership-hero {
-    background: var(--color-navy-deep);
+    background: var(--color-navy);
     color: var(--color-white);
+    padding-bottom: 6.5rem;
   }
 
   .membership-hero__inner {
@@ -44,57 +29,9 @@ const annualDisplay = formatEuro(MEMBERSHIP_ANNUAL_FEE_CENTS);
     margin-top: var(--space-1);
   }
 
-  .membership-hero__subhead {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--color-white);
-    margin-top: var(--space-2);
-    max-width: 36ch;
-  }
-
   .membership-hero__lede {
     margin-top: var(--space-2);
     color: var(--color-steel);
     max-width: 58ch;
-  }
-
-  .membership-hero__price {
-    margin-top: var(--space-4);
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    border: 1px solid rgba(248, 250, 252, 0.2);
-    border-radius: var(--radius);
-    padding: var(--space-2) var(--space-3);
-    max-width: fit-content;
-  }
-
-  .membership-hero__price-amount {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-white);
-    letter-spacing: -0.01em;
-  }
-
-  .membership-hero__price-period {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--color-steel);
-    margin-left: 0.35rem;
-  }
-
-  .membership-hero__price-billing {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--color-white);
-  }
-
-  .membership-hero__price-note {
-    font-size: 0.85rem;
-    color: var(--color-steel);
-  }
-
-  .membership-hero__cta {
-    margin-top: var(--space-4);
   }
 </style>

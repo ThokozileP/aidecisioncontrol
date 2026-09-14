@@ -15,17 +15,32 @@ const STEPS = [
   { number: '04', title: 'Membership & Payment', description: 'Review your membership and complete payment securely.' },
 ] as const;
 
-function ProgressIndicator({ currentStep }: { currentStep: number }) {
+function ProgressIndicator({
+  currentStep,
+  onStepSelect,
+}: {
+  currentStep: number;
+  onStepSelect: (index: number) => void;
+}) {
   return (
     <ol className="membership-form__progress" aria-label="Application progress">
       {STEPS.map((step, index) => {
         const state = index === currentStep ? 'current' : index < currentStep ? 'complete' : 'upcoming';
+        const reachable = index <= currentStep;
         return (
           <li key={step.number} className={`membership-form__progress-item membership-form__progress-item--${state}`}>
-            <span className="membership-form__progress-number" aria-hidden="true">
-              {step.number}
-            </span>
-            <span className="membership-form__progress-label">{step.title}</span>
+            <button
+              type="button"
+              className="membership-form__progress-button"
+              onClick={() => onStepSelect(index)}
+              disabled={!reachable}
+              aria-current={state === 'current' ? 'step' : undefined}
+            >
+              <span className="membership-form__progress-number" aria-hidden="true">
+                {step.number}
+              </span>
+              <span className="membership-form__progress-label">{step.title}</span>
+            </button>
           </li>
         );
       })}
@@ -89,6 +104,12 @@ export function MembershipForm() {
   function goBack() {
     setSubmitError(null);
     setCurrentStep((step) => Math.max(step - 1, 0));
+  }
+
+  function goToStep(index: number) {
+    if (index > currentStep) return;
+    setSubmitError(null);
+    setCurrentStep(index);
   }
 
   async function handleSubmit() {
@@ -197,7 +218,7 @@ export function MembershipForm() {
   return (
     <div className="membership-form" id="membership-form">
       <div ref={headingRef} />
-      <ProgressIndicator currentStep={currentStep} />
+      <ProgressIndicator currentStep={currentStep} onStepSelect={goToStep} />
 
       <div className="membership-form__panel">
         <AnimatePresence mode="wait">

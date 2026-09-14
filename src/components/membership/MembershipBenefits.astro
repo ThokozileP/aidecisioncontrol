@@ -1,61 +1,42 @@
 ---
-import { TicketPercent, Users, BookOpenText, MessageSquareQuote, Rocket, Handshake } from 'lucide-react';
 import SectionHeading from '../SectionHeading.astro';
 
 const benefits = [
   {
-    icon: TicketPercent,
-    eyebrow: 'Event Benefits',
-    title: '20% off Forum events',
-    description: 'Members receive a 20% discount on eligible AI Decision Control Forum event tickets.',
-  },
-  {
-    icon: Users,
-    eyebrow: 'Professional Community',
+    tag: '01 · Community',
     title: 'Connect with practitioners',
     description:
-      'Engage with professionals working across AI governance, risk, compliance, safety and regulation.',
+      'Engage with professionals working across AI governance, risk, compliance, safety and regulation, and build relationships across sectors facing the same operational questions.',
   },
   {
-    icon: BookOpenText,
-    eyebrow: 'Member Resources',
-    title: 'Access selected insights',
+    tag: '02 · Events',
+    title: '20% off Forum events',
     description:
-      'Receive access to selected Forum resources, research and practical AI governance materials.',
+      'Members receive a 20% discount on eligible AI Decision Control Forum event tickets, applied automatically at checkout.',
   },
   {
-    icon: MessageSquareQuote,
-    eyebrow: 'Contribute',
+    tag: '03 · Resources',
+    title: 'Access selected research',
+    description:
+      "Receive access to selected Forum resources, research and practical AI governance materials as they're published.",
+  },
+  {
+    tag: '04 · Participation',
     title: 'Shape the conversation',
-    description: 'Members can contribute insights, participate in discussions and support Forum initiatives.',
-  },
-  {
-    icon: Rocket,
-    eyebrow: 'Early Access',
-    title: 'Be first to know',
-    description: 'Receive early access to selected events, programmes and opportunities.',
-  },
-  {
-    icon: Handshake,
-    eyebrow: 'Collaboration',
-    title: 'Build meaningful connections',
     description:
-      'Connect with professionals and experts tackling real-world AI decision-making challenges.',
+      'Contribute insights, participate in discussions, and get early access to selected events and programmes as they open.',
   },
 ];
 ---
 
 <section class="section section--alt">
   <div class="wrapper">
-    <SectionHeading eyebrow="Why join" heading="Membership benefits" />
-    <div class="grid membership-benefits">
+    <SectionHeading eyebrow="Why join" heading="What membership includes." />
+    <div class="benefit-grid">
       {
-        benefits.map(({ icon: Icon, eyebrow, title, description }) => (
-          <div class="card membership-benefit-card">
-            <span class="membership-benefit-card__icon" aria-hidden="true">
-              <Icon size={22} strokeWidth={1.75} />
-            </span>
-            <p class="tag">{eyebrow}</p>
+        benefits.map(({ tag, title, description }) => (
+          <div class="benefit-cell">
+            <span class="tag">{tag}</span>
             <h3>{title}</h3>
             <p>{description}</p>
           </div>
@@ -66,30 +47,35 @@ const benefits = [
 </section>
 
 <style>
-  .membership-benefits {
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  .benefit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
   }
 
-  .membership-benefit-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-start;
+  .benefit-cell {
+    background: var(--color-white);
+    padding: var(--space-3);
   }
 
-  .membership-benefit-card__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--radius);
-    background: rgba(21, 166, 223, 0.12);
-    color: var(--color-navy);
-    margin-bottom: 0.25rem;
+  .benefit-cell h3 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--color-ink);
+    margin: 0.5rem 0;
   }
 
-  .membership-benefit-card p:last-child {
+  .benefit-cell p {
+    font-size: 0.9rem;
     color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 880px) {
+    .benefit-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

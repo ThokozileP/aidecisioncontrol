@@ -2,6 +2,7 @@
 export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MembershipHero from '../components/membership/MembershipHero.astro';
+import MembershipPricingCard from '../components/membership/MembershipPricingCard.astro';
 import MembershipBenefits from '../components/membership/MembershipBenefits.astro';
 import { MembershipForm } from '../components/membership/MembershipForm';
 import '../styles/membership.css';
@@ -12,9 +13,10 @@ import '../styles/membership.css';
   description="Join the AI Decision Control Forum and become part of a global professional community focused on AI governance, control, risk, safety and regulation."
 >
   <MembershipHero />
+  <MembershipPricingCard />
   <MembershipBenefits />
 
-  <section class="section" id="apply">
+  <section class="section section--alt" id="apply">
     <div class="wrapper membership-apply">
       <p class="eyebrow">Apply</p>
       <h2>Professional Membership Application</h2>

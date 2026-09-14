@@ -80,6 +80,57 @@ export function TextField({
   );
 }
 
+interface DatalistFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: readonly string[];
+  required?: boolean;
+  error?: string;
+  hint?: string;
+  placeholder?: string;
+  autoComplete?: string;
+}
+
+export function DatalistField({
+  label,
+  name,
+  value,
+  onChange,
+  options,
+  required,
+  error,
+  hint,
+  placeholder = 'Start typing…',
+  autoComplete,
+}: DatalistFieldProps) {
+  const listId = `${name}-options`;
+  return (
+    <FieldShell label={label} htmlFor={name} required={required} error={error} hint={hint}>
+      <input
+        id={name}
+        name={name}
+        type="text"
+        list={listId}
+        value={value}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
+        required={required}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? `${name}-error` : undefined}
+        className="field__control"
+        onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
+      />
+      <datalist id={listId}>
+        {options.map((option) => (
+          <option key={option} value={option} />
+        ))}
+      </datalist>
+    </FieldShell>
+  );
+}
+
 interface SelectFieldProps {
   label: string;
   name: string;

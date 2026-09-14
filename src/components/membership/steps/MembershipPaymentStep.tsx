@@ -5,6 +5,7 @@ import type { MembershipDraft, FieldErrors } from '../formState';
 import {
   MEMBERSHIP_ANNUAL_FEE_CENTS,
   MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS,
+  MEMBERSHIP_DURATION_MONTHS,
   formatEuro,
 } from '../../../lib/membership/types';
 
@@ -102,6 +103,30 @@ export function MembershipPaymentStep({ draft, errors, update, onSubmit, submitt
           {submitError}
         </p>
       )}
+
+      <div className="trust-strip">
+        <div className="trust-item">
+          <span className="trust-item__mark" aria-hidden="true">
+            ✓
+          </span>
+          <p>Payment is handled by Stripe's secure checkout. This site never sees your card details.</p>
+        </div>
+        <div className="trust-item">
+          <span className="trust-item__mark" aria-hidden="true">
+            ✓
+          </span>
+          <p>
+            Your membership activates as soon as payment is confirmed, and covers{' '}
+            {MEMBERSHIP_DURATION_MONTHS} months from that date.
+          </p>
+        </div>
+        <div className="trust-item">
+          <span className="trust-item__mark" aria-hidden="true">
+            ✓
+          </span>
+          <p>You'll receive a confirmation once your application and payment are processed.</p>
+        </div>
+      </div>
 
       <button type="button" className="button button--primary membership-form__submit" onClick={onSubmit} disabled={submitting}>
         {submitting ? 'Redirecting to secure payment…' : 'Proceed to Secure Payment'}

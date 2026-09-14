@@ -1,0 +1,97 @@
+---
+import { MEMBERSHIP_ANNUAL_FEE_CENTS, MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS, formatEuro } from '../../lib/membership/types';
+
+const monthlyDisplay = formatEuro(MEMBERSHIP_MONTHLY_EQUIVALENT_CENTS);
+const annualDisplay = formatEuro(MEMBERSHIP_ANNUAL_FEE_CENTS);
+---
+
+<div class="wrapper pricing-wrap">
+  <div class="pricing-card">
+    <div class="pricing-card__info">
+      <p class="tag">Professional Membership</p>
+      <p class="pricing-card__price">
+        <span class="pricing-card__amount">{monthlyDisplay}</span>
+        <span class="pricing-card__unit">/ month</span>
+      </p>
+      <p class="pricing-card__sub">Billed annually at {annualDisplay} · 12 months from activation</p>
+      <p class="pricing-card__benefit">
+        <span class="pricing-card__dot" aria-hidden="true"></span>Includes 20% off eligible Forum events
+      </p>
+    </div>
+    <a class="button button--primary" href="#membership-form">Become a Member</a>
+  </div>
+</div>
+
+<style>
+  .pricing-wrap {
+    margin-top: -4.5rem;
+    position: relative;
+    z-index: 3;
+  }
+
+  .pricing-card {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    box-shadow: 0 12px 32px rgba(6, 27, 58, 0.14);
+  }
+
+  .pricing-card__price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+  }
+
+  .pricing-card__amount {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    color: var(--color-navy);
+  }
+
+  .pricing-card__unit {
+    font-size: 0.9rem;
+    color: var(--color-ink-muted);
+  }
+
+  .pricing-card__sub {
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+    margin-top: 0.4rem;
+  }
+
+  .pricing-card__benefit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    color: var(--color-navy);
+    background: #ebf3ef;
+    border: 1px solid #cfe3d8;
+    padding: 0.45rem 0.75rem;
+    border-radius: 3px;
+  }
+
+  .pricing-card__dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--color-allow);
+    display: inline-block;
+  }
+
+  @media (max-width: 880px) {
+    .pricing-card {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: left;
+    }
+  }
+</style>
