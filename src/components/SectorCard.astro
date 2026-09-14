@@ -2,57 +2,77 @@
 import type { Sector } from '../data/sectors';
 
 interface Props {
+  index: number;
   sector: Sector;
 }
 
-const { sector } = Astro.props;
+const { index, sector } = Astro.props;
 ---
 
-<div class="card sector-card">
-  <h3>{sector.name}</h3>
-  <ul class="sector-card__examples">
+<div class="industry-panel">
+  <div class="industry-panel__head">
+    <h3>{sector.name}</h3>
+    <span class="tag">Sector {String(index + 1).padStart(2, '0')}</span>
+  </div>
+  <ul class="industry-panel__examples">
     {sector.examples.map((example) => <li>{example}</li>)}
   </ul>
-  <p class="sector-card__question">{sector.question}</p>
+  <p class="industry-panel__question">{sector.question}</p>
 </div>
 
 <style>
-  .sector-card {
+  .industry-panel {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .industry-panel__head {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--color-border);
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: baseline;
     gap: var(--space-2);
   }
 
-  .sector-card__examples {
+  .industry-panel__head h3 {
+    font-size: 1.2rem;
+  }
+
+  .industry-panel__examples {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.4rem 1rem;
+    gap: 0.55rem 1rem;
+    padding: var(--space-2) var(--space-3);
     color: var(--color-ink-muted);
-    font-size: 0.92rem;
+    font-size: 0.9rem;
   }
 
-  .sector-card__examples li {
+  .industry-panel__examples li {
     padding-left: 0.9rem;
     position: relative;
   }
 
-  .sector-card__examples li::before {
+  .industry-panel__examples li::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 0.55em;
-    width: 5px;
-    height: 5px;
-    background: var(--color-accent);
-    border-radius: 50%;
+    top: 0.6em;
+    width: 6px;
+    height: 1px;
+    background: var(--color-ink-muted);
   }
 
-  .sector-card__question {
-    margin-top: auto;
-    padding-top: var(--space-2);
+  .industry-panel__question {
+    padding: var(--space-2) var(--space-3);
     border-top: 1px solid var(--color-border);
-    font-weight: 600;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
     color: var(--color-navy);
+    max-width: none;
   }
 </style>

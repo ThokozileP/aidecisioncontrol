@@ -1,20 +1,31 @@
-@import '@fontsource-variable/inter';
+/* Font faces (Libre Caslon Text, IBM Plex Sans, IBM Plex Mono) are loaded via
+   <link> tags in BaseLayout.astro's <head> — preconnect + stylesheet, not a
+   CSS @import, so the font request starts as soon as the HTML streams in
+   rather than waiting for this stylesheet to be fetched and parsed first. */
 
 :root {
-  --color-navy-deep: #061b3a;
-  --color-navy: #082b55;
-  --color-accent: #15a6df;
-  --color-steel: #7397aa;
-  --color-bg: #f8fafc;
+  --color-navy-deep: #04122a;
+  --color-navy: #061b3a;
+  --color-steel: #8fa3c2;
+  --color-bg: #f4f6f8;
   --color-white: #ffffff;
-  --color-ink: #0b1a2e;
-  --color-ink-muted: #3c5064;
-  --color-border: #dde5ec;
+  --color-ink: #0b1220;
+  --color-ink-muted: #4a5568;
+  --color-border: #d8dee6;
 
-  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Signal colors — Allow / Escalate / Block. Reserved for the runtime-decision
+     meaning shown in the hero caption bar and diagram; not used as decorative
+     accents elsewhere, so their meaning stays legible wherever they appear. */
+  --color-allow: #1f8a5f;
+  --color-escalate: #b8792a;
+  --color-block: #a73a34;
+
+  --font-serif: 'Libre Caslon Text', Georgia, serif;
+  --font-sans: 'IBM Plex Sans', -apple-system, system-ui, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   --max-width: 78rem;
-  --radius: 6px;
+  --radius: 4px;
 
   --space-1: 0.5rem;
   --space-2: 1rem;
@@ -68,10 +79,10 @@ h1,
 h2,
 h3,
 h4 {
-  font-weight: 650;
+  font-family: var(--font-serif);
+  font-weight: 400;
   line-height: 1.2;
-  letter-spacing: -0.01em;
-  color: var(--color-navy-deep);
+  color: var(--color-navy);
   margin: 0;
 }
 
@@ -93,16 +104,26 @@ button {
   font-family: inherit;
 }
 
-/* Consistent, visible focus state across the site (WCAG 2.4.7) */
+/* Consistent, visible focus state across the site (WCAG 2.4.7). Navy reads
+   clearly on the light background most content sits on; header/footer/dark
+   sections and the photo hero override to a light color so the ring stays
+   visible against navy/photo backgrounds instead of disappearing into them. */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-navy);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+.site-header :focus-visible,
+.site-footer :focus-visible,
+.section--dark :focus-visible,
+.hero :focus-visible {
+  outline-color: var(--color-white);
 }
 
 .visually-hidden {
@@ -146,17 +167,16 @@ summary:focus-visible {
 }
 
 .eyebrow {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  /* Accent cyan on light backgrounds falls short of WCAG AA (~2.7:1) at
-     this size — navy carries the accent's role at readable contrast. */
-  color: var(--color-navy);
+  color: var(--color-ink-muted);
 }
 
 .section--dark .eyebrow {
-  color: var(--color-accent);
+  color: var(--color-steel);
 }
 
 .section {
@@ -175,7 +195,7 @@ summary:focus-visible {
 }
 
 .section--dark {
-  background: var(--color-navy-deep);
+  background: var(--color-navy);
   color: var(--color-bg);
 }
 
@@ -213,13 +233,34 @@ summary:focus-visible {
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
+/* Primary buttons stay high-contrast against whatever they're placed on:
+   navy-on-white by default, flipping to white-on-navy inside dark/photo
+   contexts — matching the prototype's header/hero CTAs exactly without
+   needing a separate class for "primary button on a dark background". */
 .button--primary {
-  background: var(--color-accent);
-  color: var(--color-navy-deep);
+  background: var(--color-navy);
+  color: var(--color-white);
 }
 
 .button--primary:hover {
-  background: #0f8bbd;
+  background: var(--color-navy-deep);
+}
+
+.section--dark .button--primary,
+.site-header .button--primary,
+.hero .button--primary,
+.membership-hero .button--primary,
+.membership-success .button--primary {
+  background: var(--color-white);
+  color: var(--color-navy);
+}
+
+.section--dark .button--primary:hover,
+.site-header .button--primary:hover,
+.hero .button--primary:hover,
+.membership-hero .button--primary:hover,
+.membership-success .button--primary:hover {
+  background: var(--color-steel);
 }
 
 .button--secondary {
@@ -242,7 +283,7 @@ summary:focus-visible {
 .section--alt .button--secondary:hover,
 .section:not(.section--dark):not(.section--alt) .button--secondary:hover {
   border-color: var(--color-navy);
-  background: rgba(8, 43, 85, 0.05);
+  background: rgba(6, 27, 58, 0.05);
 }
 
 .button--ghost {
@@ -253,7 +294,7 @@ summary:focus-visible {
 
 .button--ghost:hover {
   border-color: var(--color-navy);
-  background: rgba(8, 43, 85, 0.05);
+  background: rgba(6, 27, 58, 0.05);
 }
 
 .section--dark .button--ghost {
@@ -278,7 +319,10 @@ summary:focus-visible {
 }
 
 .card h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
   font-size: 1.1rem;
+  color: var(--color-ink);
 }
 
 .grid {
@@ -294,14 +338,20 @@ summary:focus-visible {
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
 }
 
+/* A small mono-uppercase label — the "tag" pattern used throughout the
+   console-style UI (console-cell tags, sector labels, benefit eyebrows).
+   Deliberately not a pill/background: this design system marks things with
+   typography, not color chips. */
 .tag {
   display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--color-navy);
-  background: rgba(21, 166, 223, 0.12);
-  padding: 0.3rem 0.6rem;
-  border-radius: 999px;
+  color: var(--color-ink-muted);
+}
+
+.section--dark .tag {
+  color: var(--color-steel);
 }

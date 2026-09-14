@@ -27,7 +27,7 @@
 
 .membership-form__progress-item--current,
 .membership-form__progress-item--complete {
-  border-bottom-color: var(--color-accent);
+  border-bottom-color: var(--color-navy);
   color: var(--color-navy-deep);
 }
 
@@ -283,7 +283,7 @@
 }
 
 .membership-summary__benefits svg {
-  color: var(--color-accent);
+  color: var(--color-allow);
   flex-shrink: 0;
 }
 

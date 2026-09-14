@@ -1,15 +1,16 @@
 ---
 export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DecisionControlDiagram from '../components/DecisionControlDiagram.astro';
-import ConceptCard from '../components/ConceptCard.astro';
 import SectorCard from '../components/SectorCard.astro';
-import SectionHeading from '../components/SectionHeading.astro';
+import { JoinForm } from '../components/JoinForm';
 import { controlConcepts } from '../data/controlConcepts';
-import { definitionAreas } from '../data/definitionAreas';
 import { autonomyProgression } from '../data/autonomyProgression';
 import { sectors, otherEnvironments } from '../data/sectors';
-import { forumFocusAreas } from '../data/forumFocusAreas';
+import { pillars } from '../data/pillars';
+import '../styles/home.css';
+
+const heroDescription =
+  'A boardroom overlooking a city skyline at dusk, with a glowing three-way control dial on the table reading Allow, Escalate, Block, and folders labelled for healthcare, financial services, regulation and policy, and research.';
 ---
 
 <BaseLayout
@@ -17,277 +18,483 @@ import { forumFocusAreas } from '../data/forumFocusAreas';
   description="The AI Decision Control Forum brings together practitioners and researchers exploring how organisations retain operational control when AI participates in consequential decisions."
 >
   <!-- Hero -->
-  <section class="section hero">
-    <div class="wrapper hero__grid">
-      <div class="hero__copy">
-        <p class="eyebrow">AI Decision Control</p>
-        <h1>When AI can act, organisations need more than governance.</h1>
-        <p class="lede">
-          AI Decision Control examines how organisations retain authority when AI systems
-          participate in consequential decisions and actions — determining what may proceed, what
-          must be constrained, and when human intervention is required.
-        </p>
-        <div class="hero__ctas">
-          <a class="button button--primary" href="#definition">Explore AI Decision Control</a>
-          <a class="button button--ghost" href="/founding-circle">Join the Founding Circle</a>
-        </div>
-      </div>
-      <div class="hero__visual" aria-hidden="false">
-        <DecisionControlDiagram />
+  <section class="hero">
+    <div class="hero-bg" role="img" aria-label={heroDescription}></div>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="wrapper hero-inner">
+      <p class="eyebrow">AI Decision Control Forum</p>
+      <h1>When AI can act, governance alone isn't enough.</h1>
+      <p class="lede hero-lede">
+        For risk, engineering and clinical leaders deploying autonomous AI in healthcare and
+        financial services: a practitioner forum on what happens when a policy has to become a
+        runtime decision.
+      </p>
+      <div class="hero-ctas">
+        <a class="button button--primary" href="/founding-circle">Apply to the Founding Circle</a>
+        <a class="hero-cta-link" href="#definition">See how decision control works ↓</a>
       </div>
     </div>
   </section>
+
+  <div class="hero-caption-bar">
+    <div class="wrapper hero-caption-bar__inner">
+      <span class="tag">Runtime decision routing</span>
+      <span class="signal-legend">
+        <span><span class="signal-dot" style={`background:var(--color-allow)`}></span>Allow</span>
+        <span><span class="signal-dot" style={`background:var(--color-escalate)`}></span>Escalate</span>
+        <span><span class="signal-dot" style={`background:var(--color-block)`}></span>Block</span>
+      </span>
+    </div>
+  </div>
 
   <!-- Operational gap -->
-  <section class="section section--alt">
-    <div class="wrapper">
-      <SectionHeading
-        eyebrow="The operational gap"
-        heading="Governance defines the rules. Decision control determines what happens next."
-      />
-      <div class="operational-gap__copy">
-        <p>
-          AI governance establishes policies, responsibilities, risk classifications and oversight
-          requirements. But when an AI system is operating inside a real workflow, another
-          question appears:
-        </p>
-        <p class="operational-gap__question">
-          Should this particular decision or action be allowed to proceed?
-        </p>
-        <p>AI Decision Control focuses on that operational layer.</p>
-      </div>
-      <div class="grid grid--4" style="margin-top: var(--space-4);">
-        {controlConcepts.map((concept) => <ConceptCard term={concept.term} question={concept.question} />)}
-      </div>
-    </div>
-  </section>
-
-  <!-- Definition -->
   <section class="section" id="definition">
-    <div class="wrapper">
-      <SectionHeading heading="What is AI Decision Control?" />
-      <p class="lede">
-        AI Decision Control is the operational discipline concerned with maintaining
-        organisational authority over AI-supported decisions and actions.
-      </p>
-      <p class="definition__body">
-        It examines how policies, risk requirements, human authority and contextual constraints
-        become enforceable controls at the point where AI influences or executes consequential
-        decisions.
-      </p>
-      <ul class="definition__areas">
-        {definitionAreas.map((area) => <li>{area}</li>)}
-      </ul>
-    </div>
-  </section>
-
-  <!-- Why now -->
-  <section class="section section--dark">
-    <div class="wrapper">
-      <SectionHeading heading="The control problem changes as AI becomes more autonomous." />
-      <ol class="progression">
+    <div class="wrapper gap-layout">
+      <div>
+        <p class="eyebrow">The operational gap</p>
+        <h2>Governance sets the rules. Decision control decides what happens next.</h2>
+        <p class="operational-gap__copy">
+          AI governance defines policy, risk classification and oversight. But once an AI system is
+          acting inside a live workflow, a different question appears in real time: should this
+          specific action be allowed to proceed, right now, in this context.
+        </p>
+        <p class="operational-gap__copy">
+          That operational layer, where policy becomes an enforceable runtime decision, is what
+          this forum exists to work through.
+        </p>
+      </div>
+      <div class="console-grid">
         {
-          autonomyProgression.map((stage, i) => (
-            <li class="progression__stage">
-              <span class="progression__index">{String(i + 1).padStart(2, '0')}</span>
-              <span class="progression__name">{stage.stage}</span>
-              <span class="progression__desc">{stage.description}</span>
-            </li>
+          controlConcepts.map((concept, index) => (
+            <div class="console-cell">
+              <span class="tag">
+                {String(index + 1).padStart(2, '0')} · {concept.term.toUpperCase()}
+              </span>
+              <h3>{concept.heading}</h3>
+              <p>{concept.body}</p>
+            </div>
           ))
         }
-      </ol>
-      <p class="progression__note">
-        The more authority AI receives, the more important it becomes to define what the system is
-        actually permitted to do at runtime.
-      </p>
+      </div>
     </div>
   </section>
 
-  <!-- Regulated environments -->
+  <!-- Autonomy sequence -->
   <section class="section section--alt">
     <div class="wrapper">
-      <SectionHeading heading="Where decision control matters most" />
-      <div class="grid grid--2">
-        {sectors.map((sector) => <SectorCard sector={sector} />)}
+      <div class="section-heading">
+        <p class="eyebrow">Why this is getting harder</p>
+        <h2>The control problem changes as AI takes on more authority.</h2>
       </div>
-      <div class="card other-environments">
-        <h3>{otherEnvironments.name}</h3>
-        <p>{otherEnvironments.description}</p>
+      <div class="sequence">
+        {
+          autonomyProgression.map((stage, index) => (
+            <div class="seq-step">
+              <span class="tag">{String(index + 1).padStart(2, '0')}</span>
+              <h3>{stage.stage}</h3>
+              <p>{stage.description}</p>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>
 
-  <!-- Forum teaser -->
+  <!-- Industries -->
   <section class="section">
-    <div class="wrapper forum-teaser">
-      <div>
-        <SectionHeading eyebrow="AI Decision Control Forum" heading="A practitioner community for the operational layer." />
-        <p class="lede">
-          The AI Decision Control Forum is an independent practitioner community bringing together
-          experts working across AI engineering, risk, healthcare, financial services, assurance,
-          regulation and research — building a practical, cross-disciplinary conversation about how
-          organisations retain control as AI systems become increasingly capable of influencing and
-          executing consequential decisions.
-        </p>
-        <a class="button button--primary" href="/forum">Learn about the Forum</a>
+    <div class="wrapper">
+      <div class="section-heading">
+        <p class="eyebrow">Where this matters most</p>
+        <h2>Two sectors where the runtime question can't wait for a policy review.</h2>
       </div>
-      <ul class="forum-teaser__list">
-        {forumFocusAreas.map((area) => <li>{area}</li>)}
-      </ul>
+      <div class="grid grid--2 industry-grid">
+        {sectors.map((sector, index) => <SectorCard index={index} sector={sector} />)}
+      </div>
+      <p class="industries__note">{otherEnvironments.description}</p>
+    </div>
+  </section>
+
+  <!-- Pillars -->
+  <section class="section section--alt">
+    <div class="wrapper">
+      <div class="section-heading">
+        <p class="eyebrow">What the forum covers</p>
+        <h2>Three working areas, not a keyword list.</h2>
+      </div>
+      <div class="pillars">
+        {
+          pillars.map((pillar) => (
+            <div class="pillar">
+              <h3>{pillar.title}</h3>
+              <ul>
+                {pillar.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Community -->
+  <section class="section section--dark">
+    <div class="wrapper">
+      <p class="eyebrow">AI Decision Control Forum</p>
+      <h2 class="community__heading">A practitioner community for the operational layer.</h2>
+      <p class="lede community__lede">
+        An independent community of people working across AI engineering, risk, healthcare,
+        financial services, assurance, regulation and research, building a practical conversation
+        about how organisations retain control as AI becomes capable of executing consequential
+        decisions.
+      </p>
+      <div class="practitioners" aria-label="Founding practitioners, placeholder">
+        <span class="practitioner-slot">Founding practitioner</span>
+        <span class="practitioner-slot">Founding practitioner</span>
+        <span class="practitioner-slot">Founding practitioner</span>
+        <span class="practitioner-slot">+ your name here</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Join -->
+  <section class="section">
+    <div class="wrapper">
+      <div class="join">
+        <div>
+          <p class="eyebrow">Get involved</p>
+          <h2 class="join__heading">Two ways to take part.</h2>
+          <p class="join__copy">
+            Apply to the Founding Circle if you want to help shape the Forum's direction, or leave
+            your email for updates as the community and its research take shape.
+          </p>
+        </div>
+        <JoinForm client:load />
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .hero__grid {
-    display: grid;
-    gap: var(--space-4);
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    color: var(--color-white);
+    min-height: 640px;
+    display: flex;
     align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('/aidecisioncontrolforum-hero.jpg');
+    background-size: cover;
+    background-position: center 42%;
+  }
+
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      rgba(4, 18, 42, 0.96) 0%,
+      rgba(4, 18, 42, 0.86) 32%,
+      rgba(4, 18, 42, 0.42) 60%,
+      rgba(4, 18, 42, 0.18) 100%
+    );
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    padding-block: 9.5rem 4rem;
   }
 
   .hero h1 {
-    font-size: clamp(2rem, 1.4rem + 2.5vw, 3rem);
-    margin-top: var(--space-1);
-    max-width: 20ch;
+    color: var(--color-white);
+    font-size: clamp(2rem, 1.4rem + 2.5vw, 3.25rem);
+    line-height: 1.12;
+    max-width: 15ch;
+    margin-top: var(--space-2);
   }
 
-  .hero .lede {
+  .hero-lede {
+    color: #d3dce8;
     margin-top: var(--space-2);
     max-width: 56ch;
   }
 
-  .hero__ctas {
+  .hero-ctas {
     display: flex;
+    align-items: center;
+    gap: var(--space-3);
     flex-wrap: wrap;
-    gap: var(--space-2);
     margin-top: var(--space-3);
   }
 
-  .hero__visual {
-    display: none;
+  .hero-cta-link {
+    color: #dce3ec;
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(220, 227, 236, 0.5);
+    padding-bottom: 2px;
   }
 
-  @media (min-width: 960px) {
-    .hero__grid {
-      grid-template-columns: 1.1fr 1fr;
+  .hero-cta-link:hover {
+    border-bottom-color: #dce3ec;
+  }
+
+  @media (max-width: 880px) {
+    .hero {
+      min-height: 560px;
     }
 
-    .hero__visual {
-      display: block;
+    .hero-scrim {
+      background: rgba(4, 18, 42, 0.86);
     }
+
+    .hero-inner {
+      padding-block: 7.5rem 3rem;
+    }
+  }
+
+  /* ---------- Hero caption bar ---------- */
+  .hero-caption-bar {
+    background: var(--color-navy-deep);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-block: var(--space-2);
+  }
+
+  .hero-caption-bar__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .signal-legend {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: #dce3ec;
+  }
+
+  .signal-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .signal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  @media (max-width: 880px) {
+    .hero-caption-bar__inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  /* ---------- Operational gap: 2x2 console grid ---------- */
+  .gap-layout {
+    display: grid;
+    gap: var(--space-4);
+    align-items: start;
   }
 
   .operational-gap__copy {
     max-width: 60ch;
+    color: var(--color-ink-muted);
+    margin-top: var(--space-2);
+  }
+
+  .console-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+  }
+
+  .console-cell {
+    background: var(--color-white);
+    padding: var(--space-3);
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
-    color: var(--color-ink-muted);
+    gap: 0.5rem;
   }
 
-  .operational-gap__question {
-    font-size: 1.25rem;
-    font-weight: 650;
-    color: var(--color-navy-deep);
-  }
-
-  .definition__body {
-    max-width: 60ch;
-    color: var(--color-ink-muted);
-    margin-top: var(--space-2);
-  }
-
-  .definition__areas {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-top: var(--space-4);
-  }
-
-  .definition__areas li {
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    padding: 0.4rem 0.9rem;
-    font-size: 0.88rem;
+  .console-cell h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
     font-weight: 600;
-    color: var(--color-navy);
+    color: var(--color-ink);
   }
 
-  .progression {
-    list-style: none;
+  .console-cell p {
+    font-size: 0.88rem;
+    color: var(--color-ink-muted);
+    max-width: none;
+  }
+
+  @media (min-width: 880px) {
+    .gap-layout {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .console-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Autonomy sequence ---------- */
+  .sequence {
     display: grid;
-    gap: var(--space-3);
-    margin-top: var(--space-2);
-  }
-
-  .progression__stage {
-    display: grid;
-    grid-template-columns: auto auto 1fr;
-    align-items: baseline;
-    gap: var(--space-2);
-    padding-bottom: var(--space-2);
-    border-bottom: 1px solid rgba(115, 151, 170, 0.25);
-  }
-
-  .progression__index {
-    color: var(--color-accent);
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .progression__name {
-    font-weight: 700;
-    color: var(--color-white);
-    min-width: 11ch;
-  }
-
-  .progression__desc {
-    color: var(--color-steel);
-  }
-
-  .progression__note {
-    max-width: 56ch;
-    margin-top: var(--space-4);
-    font-size: 1.1rem;
-    color: var(--color-white);
-  }
-
-  .other-environments {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--color-border);
     margin-top: var(--space-3);
   }
 
-  .other-environments p {
-    color: var(--color-ink-muted);
-    margin-top: 0.5rem;
+  .seq-step {
+    padding: var(--space-2) var(--space-2) 0;
+    border-left: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
   }
 
-  .forum-teaser {
+  .seq-step:first-child {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .seq-step h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .seq-step p {
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 880px) {
+    .sequence {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .seq-step:nth-child(3) {
+      border-left: none;
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sequence {
+      grid-template-columns: 1fr;
+    }
+
+    .seq-step {
+      border-left: none;
+      padding-left: 0;
+    }
+  }
+
+  /* ---------- Industries ---------- */
+  .industry-grid {
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+
+  .industries__note {
+    margin-top: var(--space-3);
+    font-size: 0.92rem;
+    color: var(--color-ink-muted);
+    max-width: 70ch;
+  }
+
+  /* ---------- Pillars ---------- */
+  .pillars {
     display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-4);
   }
 
-  .forum-teaser__list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    align-content: start;
-  }
-
-  .forum-teaser__list li {
-    padding: 0.75rem 1rem;
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+  .pillar h3 {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--color-navy);
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
   }
 
-  @media (min-width: 960px) {
-    .forum-teaser {
-      grid-template-columns: 1.4fr 1fr;
+  .pillar ul {
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .pillar li {
+    font-size: 0.9rem;
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 880px) {
+    .pillars {
+      grid-template-columns: 1fr;
     }
+  }
+
+  /* ---------- Community ---------- */
+  .community__heading {
+    max-width: 20ch;
+    margin-top: var(--space-1);
+  }
+
+  .community__lede {
+    margin-top: var(--space-2);
+  }
+
+  .practitioners {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-top: var(--space-4);
+  }
+
+  .practitioner-slot {
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius);
+    padding: 0.6rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-steel);
+  }
+
+  /* ---------- Join ---------- */
+  .join__heading {
+    max-width: none;
+  }
+
+  .join__copy {
+    margin-top: var(--space-2);
+    color: var(--color-ink-muted);
   }
 </style>

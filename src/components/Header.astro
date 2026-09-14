@@ -1,6 +1,5 @@
 ---
 import { mainNav } from '../data/navigation';
-import { mailto } from '../consts';
 
 const path = Astro.url.pathname;
 function isActive(href: string): boolean {
@@ -51,9 +50,8 @@ function isActive(href: string): boolean {
         }
       </ul>
       <div class="site-nav__ctas">
-        <a class="button button--ghost" href="/founding-circle">Become a Founding Expert</a>
-        <a class="button button--primary button--compact" href={mailto('Join the Conversation')}>
-          Join the Conversation
+        <a class="button button--primary button--compact" href="/founding-circle">
+          Apply to the Founding Circle
         </a>
       </div>
     </nav>
@@ -65,9 +63,8 @@ function isActive(href: string): boolean {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(248, 250, 252, 0.92);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--color-border);
+    background: var(--color-navy);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .site-header__inner {
@@ -83,7 +80,7 @@ function isActive(href: string): boolean {
     align-items: center;
     gap: 0.6rem;
     text-decoration: none;
-    color: var(--color-navy-deep);
+    color: var(--color-white);
     flex-shrink: 0;
   }
 
@@ -94,12 +91,13 @@ function isActive(href: string): boolean {
   }
 
   .brand__name {
-    font-weight: 700;
-    font-size: 0.95rem;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
   }
 
   .brand__suffix {
-    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
     color: var(--color-steel);
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -112,7 +110,7 @@ function isActive(href: string): boolean {
     width: 2.5rem;
     height: 2.5rem;
     background: transparent;
-    border: 1px solid var(--color-border);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: var(--radius);
     cursor: pointer;
   }
@@ -124,7 +122,7 @@ function isActive(href: string): boolean {
     display: block;
     width: 1.1rem;
     height: 2px;
-    background: var(--color-navy-deep);
+    background: var(--color-white);
     position: relative;
     transition: transform 0.15s ease, opacity 0.15s ease;
   }
@@ -167,13 +165,20 @@ function isActive(href: string): boolean {
   .site-nav__list a {
     text-decoration: none;
     font-weight: 500;
-    color: var(--color-ink);
     font-size: 1rem;
+    color: var(--color-steel);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+  }
+
+  .site-nav__list a:hover {
+    color: var(--color-white);
+    border-bottom-color: var(--color-steel);
   }
 
   .site-nav__list a[aria-current='page'] {
-    color: var(--color-navy);
-    font-weight: 700;
+    color: var(--color-white);
+    border-bottom-color: var(--color-white);
   }
 
   .site-nav__ctas {
@@ -189,10 +194,10 @@ function isActive(href: string): boolean {
       display: block;
       position: fixed;
       inset: 4.1rem 0 0 0;
-      background: var(--color-bg);
+      background: var(--color-navy);
       overflow-y: auto;
       padding: var(--space-3);
-      border-top: 1px solid var(--color-border);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
     }
   }
 
