@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perspectives | AI Decision Control Forum — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#061B3A;
+    --navy-deep:#04122A;
+    --bg:#F4F6F8;
+    --panel:#FFFFFF;
+    --ink:#0B1220;
+    --ink-soft:#4A5568;
+    --line:#D8DEE6;
+    --allow:#1F8A5F;
+    --serif: 'Libre Caslon Text', Georgia, serif;
+    --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --maxw: 1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  img,svg{display:block;max-width:100%;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+  p{max-width:62ch;color:var(--ink-soft);}
+  h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--navy);margin:0;}
+  :focus-visible{outline:2px solid var(--navy);outline-offset:3px;}
+
+  header{position:sticky;top:0;z-index:50;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.12);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;max-width:var(--maxw);margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-family:var(--serif);font-size:19px;}
+  .brand-mark{width:26px;height:26px;flex:0 0 auto;}
+  nav.primary-links{display:flex;gap:28px;list-style:none;margin:0;padding:0;}
+  nav.primary-links a{color:#DCE3EC;text-decoration:none;font-size:14.5px;padding:6px 2px;border-bottom:1px solid transparent;}
+  nav.primary-links a.current{color:#fff;border-bottom-color:#fff;}
+  nav.primary-links a:hover{border-bottom-color:#DCE3EC;color:#fff;}
+  .nav-right{display:flex;align-items:center;gap:18px;}
+  .cta-btn{background:#fff;color:var(--navy);font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 18px;border-radius:3px;text-decoration:none;border:1px solid #fff;}
+  .cta-btn:hover{background:transparent;color:#fff;}
+  .menu-toggle{display:none;background:none;border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 10px;border-radius:3px;}
+
+  .page-header{background:var(--navy);color:#fff;padding:88px 0 60px;}
+  .kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;color:#8FA3C2;margin-bottom:18px;}
+  .page-header h1{color:#fff;font-size:clamp(28px,3.8vw,42px);line-height:1.18;max-width:20ch;margin-bottom:16px;}
+  .page-header .lede{max-width:60ch;color:#C4D0E0;font-size:16.5px;}
+
+  section{padding:60px 0;}
+  .section-head{max-width:640px;margin-bottom:30px;display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .section-label{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  section h2{font-size:clamp(21px,2.2vw,27px);line-height:1.3;max-width:22ch;}
+  .section-count{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);white-space:nowrap;}
+
+  /* Published article card */
+  .article-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:4px;
+    padding:28px 30px;display:flex;justify-content:space-between;gap:28px;align-items:flex-start;
+    margin-bottom:14px;
+  }
+  .article-card .status{
+    font-family:var(--mono);font-size:10.5px;color:var(--allow);
+    background:#EBF3EF;border:1px solid #CFE3D8;padding:4px 9px;border-radius:2px;
+    display:inline-block;margin-bottom:12px;
+  }
+  .article-card h3{font-size:19px;margin-bottom:8px;}
+  .article-card p{font-size:14.5px;margin:0;}
+  .article-meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-top:14px;}
+  .article-card .go{flex:0 0 auto;font-size:14px;color:var(--navy);text-decoration:none;border-bottom:1px solid var(--navy);padding-bottom:2px;white-space:nowrap;}
+
+  /* Coming soon cards — visually distinct from published */
+  .soon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .soon-cell{background:#F7F8FA;padding:24px;}
+  .soon-cell .status{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);display:block;margin-bottom:12px;}
+  .soon-cell h3{font-family:var(--sans);font-size:15.5px;font-weight:600;color:var(--ink-soft);margin-bottom:8px;}
+  .soon-cell p{font-size:13.5px;margin:0;color:#7A8699;}
+
+  /* Notify strip */
+  .notify{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:26px 30px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;}
+  .notify form{display:flex;gap:10px;flex-wrap:wrap;}
+  .notify input[type=email]{font-family:var(--sans);font-size:14px;padding:11px 13px;border:1px solid var(--line);border-radius:3px;min-width:240px;}
+  .notify button{font-family:var(--sans);font-weight:600;font-size:14px;background:var(--navy);color:#fff;border:none;padding:11px 18px;border-radius:3px;cursor:pointer;}
+  .notify button:hover{background:var(--navy-deep);}
+
+  /* Contribute CTA */
+  .contribute{background:var(--navy);color:#fff;}
+  .contribute h2{color:#fff;max-width:22ch;}
+  .contribute p{color:#C4D0E0;margin-top:12px;}
+  .btn-primary{background:#fff;color:var(--navy);font-weight:600;font-size:14.5px;padding:12px 20px;border-radius:3px;text-decoration:none;display:inline-block;margin-top:20px;}
+  .btn-primary:hover{background:#DCE3EC;}
+
+  footer{background:var(--navy-deep);color:#8FA3C2;padding:44px 0 32px;font-size:13px;}
+  .footer-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:24px;}
+  .footer-links{display:flex;gap:20px;list-style:none;margin:0;padding:0;flex-wrap:wrap;}
+  .footer-links a{color:#8FA3C2;text-decoration:none;font-size:13px;}
+  .footer-links a:hover{color:#fff;}
+  .footer-note{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;font-size:12px;color:#6B7C96;max-width:70ch;}
+
+  @media (max-width: 880px){
+    nav.primary-links, .nav-right .cta-btn{display:none;}
+    .menu-toggle{display:block;}
+    .soon-grid{grid-template-columns:1fr;}
+    .article-card{flex-direction:column;}
+    .notify{flex-direction:column;align-items:stretch;}
+    .notify form{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" rx="3" stroke="#DCE3EC" stroke-width="1.4"/><path d="M13 6v6l4 3" stroke="#DCE3EC" stroke-width="1.4" stroke-linecap="round"/></svg>
+      AI Decision Control
+    </a>
+    <ul class="primary-links">
+      <li><a href="#">Forum</a></li>
+      <li><a href="#" class="current">Perspectives</a></li>
+      <li><a href="#">Membership</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="cta-btn" href="#">Become a member</a>
+      <button class="menu-toggle" aria-label="Open menu">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- PAGE HEADER -->
+  <section class="page-header">
+    <div class="wrap">
+      <div class="kicker">PERSPECTIVES</div>
+      <h1>Articles and practitioner notes on AI Decision Control.</h1>
+      <p class="lede">
+        Published research, practitioner notes, and outputs from the Forum's roundtables and working
+        groups, exploring the operational control of AI-supported decisions and actions.
+      </p>
+    </div>
+  </section>
+
+  <!-- PUBLISHED -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-label">PUBLISHED</div>
+          <h2>Research from the Forum's founder.</h2>
+        </div>
+        <span class="section-count">1 PUBLISHED</span>
+      </div>
+
+      <div class="article-card">
+        <div>
+          <span class="status">PUBLISHED RESEARCH</span>
+          <h3>The Decision Context Record&trade;</h3>
+          <p>
+            Defines the runtime evidence required to reconstruct what a clinical AI agent recommended,
+            why it acted, what the clinician saw, and how the workflow resolved, part of the frameworks
+            behind CARC's Evidence Engine.
+          </p>
+          <div class="article-meta">By Thokozile Phiri &middot; DOI 10.5281/zenodo.20663952</div>
+        </div>
+        <a class="go" href="https://zenodo.org/records/20663952">View record &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- IN DEVELOPMENT -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-label">IN DEVELOPMENT</div>
+          <h2>What Perspectives will cover next.</h2>
+        </div>
+        <span class="section-count">3 IN PROGRESS</span>
+      </div>
+      <div class="soon-grid">
+        <div class="soon-cell">
+          <span class="status">COMING SOON</span>
+          <h3>From AI Governance to AI Decision Control</h3>
+          <p>Why governing the system and controlling the decision are different problems.</p>
+        </div>
+        <div class="soon-cell">
+          <span class="status">COMING SOON</span>
+          <h3>Human Oversight as a Control Mechanism</h3>
+          <p>Why meaningful oversight requires more than approval interfaces.</p>
+        </div>
+        <div class="soon-cell">
+          <span class="status">COMING SOON</span>
+          <h3>The Runtime Authority Problem</h3>
+          <p>What changes when AI systems can initiate actions rather than only produce recommendations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTIFY -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="notify">
+        <div>
+          <div class="section-label" style="margin-bottom:4px;">STAY UPDATED</div>
+          <p style="margin:0;font-size:14px;">Get notified when the next Perspective publishes. One email, no spam.</p>
+        </div>
+        <form onsubmit="event.preventDefault(); this.querySelector('button').textContent='Added';">
+          <input type="email" placeholder="you@organisation.com" required>
+          <button type="submit">Notify me</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTRIBUTE -->
+  <section class="contribute">
+    <div class="wrap">
+      <div class="section-label" style="color:#8FA3C2;">CONTRIBUTE</div>
+      <h2>Working on relevant research?</h2>
+      <p>The Forum is looking for practitioner contributions, case discussions and working-group
+        outputs from people working across AI engineering, risk, healthcare, financial services,
+        assurance, regulation and research.</p>
+      <a class="btn-primary" href="mailto:hello@aidecisioncontrol.org?subject=Contribute%20a%20Perspective">Pitch a Perspective</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <div style="font-family:var(--serif);color:#fff;font-size:16px;">AI Decision Control Forum</div>
+      <ul class="footer-links">
+        <li><a href="#">Forum</a></li>
+        <li><a href="#">Perspectives</a></li>
+        <li><a href="#">Membership</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+    </div>
+    <div class="footer-note">
+      AI Decision Control is an emerging area of practice. The Forum exists to explore and develop
+      its operational principles collaboratively. © 2026 AI Decision Control Forum.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
