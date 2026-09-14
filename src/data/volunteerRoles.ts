@@ -7,58 +7,67 @@ export interface VolunteerRole {
 
 // Open volunteer roles for the Forum's /careers page. The Forum is
 // volunteer-run — these are unpaid, flexible roles, not paid positions.
+// Role descriptions sourced from the Forum's volunteer role-description
+// document (Role Description section for each role); qualifications and
+// preferred-experience detail from that document are not reproduced here.
 export const volunteerRoles: VolunteerRole[] = [
   {
     title: 'Volunteer Program Manager',
-    responsibilities: 'Coordinate Forum activities, volunteers, meetings and programmes',
+    responsibilities:
+      "Support the planning, coordination and delivery of the Forum's programmes, activities and volunteer network. The role helps ensure that initiatives, expert engagements and events are well organised and delivered professionally.",
     commitment: '3–5 hrs/week',
   },
   {
     title: 'AI Governance Research Volunteer',
     responsibilities:
-      'Research AI governance, accountability, controllability, regulation and emerging risks',
+      "Support the Forum's research and intellectual work on AI governance, controllability, accountability, human oversight and AI decision-making.",
     commitment: '2–4 hrs/week',
   },
   {
     title: 'Policy & Regulatory Affairs Volunteer',
     responsibilities:
-      'Track developments such as the EU AI Act and translate regulatory developments into Forum discussions',
+      'Help the Forum monitor, analyse and communicate developments in AI regulation and public policy, including their implications for organisations deploying AI.',
     commitment: '2–4 hrs/week',
   },
   {
     title: 'Events & Community Volunteer',
-    responsibilities: 'Support roundtables, webinars, expert sessions and community engagement',
+    responsibilities:
+      'Support the organisation of roundtables, webinars, expert discussions and community activities, helping create a professional experience for Forum participants.',
     commitment: '2–4 hrs/week',
   },
   {
     title: 'Partnerships & Outreach Volunteer',
     responsibilities:
-      'Identify and engage institutions, researchers, professional bodies and potential partners',
+      "Help develop relationships with institutions, researchers, professional communities, companies and other organisations relevant to the Forum's mission.",
     commitment: '2–4 hrs/week',
   },
   {
     title: 'Communications & Editorial Volunteer',
-    responsibilities: 'Develop articles, LinkedIn content, newsletters and Forum communications',
+    responsibilities:
+      "Develop clear, credible and engaging content that communicates the Forum's ideas, research, discussions, events and activities to a professional audience.",
     commitment: '2–4 hrs/week',
   },
   {
     title: 'Research & Publications Volunteer',
-    responsibilities: 'Help turn expert discussions into reports, briefs and publications',
+    responsibilities:
+      'Support the development of research papers, policy briefs, reports and other intellectual outputs based on evidence and Forum discussions.',
     commitment: '2–4 hrs/week',
   },
   {
     title: 'Digital & Web Volunteer',
-    responsibilities: 'Support the website, digital presence, forms and online infrastructure',
+    responsibilities:
+      "Support the Forum's website, digital presence, online resources and technology infrastructure.",
     commitment: '2–4 hrs/week',
   },
   {
     title: 'Design & Creative Volunteer',
-    responsibilities: 'Create visual materials for events, publications and social media',
+    responsibilities:
+      'Create professional visual materials for Forum events, publications, social media, presentations and other communications.',
     commitment: '2–4 hrs/week',
   },
   {
     title: 'Regional Community Volunteer',
     responsibilities:
-      "Help build the Forum's presence and network within a particular country or region",
+      "Help develop the Forum's professional network and community presence within a specific country or region.",
   },
 ];
