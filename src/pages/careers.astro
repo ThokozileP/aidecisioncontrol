@@ -1,0 +1,178 @@
+---
+export const prerender = true;
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { mailto } from '../consts';
+import { volunteerRoles } from '../data/volunteerRoles';
+---
+
+<BaseLayout
+  title="Careers"
+  description="The AI Decision Control Forum is volunteer-run. Explore open volunteer roles for practitioners who want to help build the Forum."
+>
+  <section class="section section--dark careers-header">
+    <div class="wrapper">
+      <p class="eyebrow">Volunteer roles</p>
+      <h1>Help build the AI Decision Control Forum.</h1>
+      <p class="lede">
+        The Forum runs on volunteers. These are unpaid, flexible roles for practitioners who
+        want to help shape how organisations retain control as AI systems take on more
+        consequential decisions.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrapper">
+      <div class="roles-table-wrap">
+        <table class="roles-table">
+          <thead>
+            <tr>
+              <th scope="col">Volunteer role</th>
+              <th scope="col">What they would do</th>
+              <th scope="col">Suggested commitment</th>
+              <th scope="col"><span class="visually-hidden">Apply</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              volunteerRoles.map((role) => (
+                <tr>
+                  <th scope="row">{role.title}</th>
+                  <td>{role.responsibilities}</td>
+                  <td class="roles-table__commitment">{role.commitment ?? '—'}</td>
+                  <td>
+                    <a class="roles-table__apply" href={mailto(`Volunteering: ${role.title}`)}>
+                      Apply
+                    </a>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrapper">
+      <h2>Don't see the right fit?</h2>
+      <p class="lede">
+        The Forum is early and still shaping these roles. If you think you could help in a way
+        that isn't listed here, get in touch anyway.
+      </p>
+      <a class="button button--primary careers-cta__button" href={mailto('General volunteering interest')}>
+        Get in touch
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .careers-header h1 {
+    color: var(--color-white);
+    font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
+    max-width: 22ch;
+    margin-top: var(--space-1);
+  }
+
+  .careers-header .lede {
+    margin-top: var(--space-2);
+    max-width: 58ch;
+  }
+
+  .roles-table-wrap {
+    overflow-x: auto;
+  }
+
+  .roles-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .roles-table th,
+  .roles-table td {
+    text-align: left;
+    padding: var(--space-2) var(--space-2) var(--space-2) 0;
+    border-top: 1px solid var(--color-border);
+    vertical-align: top;
+  }
+
+  .roles-table thead th {
+    border-top: none;
+    border-bottom: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    padding-bottom: 0.75rem;
+  }
+
+  .roles-table tbody th {
+    color: var(--color-ink);
+    font-weight: 600;
+    white-space: nowrap;
+    padding-right: var(--space-3);
+  }
+
+  .roles-table td {
+    color: var(--color-ink-muted);
+    line-height: 1.55;
+  }
+
+  .roles-table__commitment {
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+  }
+
+  .roles-table__apply {
+    color: var(--color-navy);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+
+  .roles-table__apply:hover {
+    text-decoration-color: var(--color-navy);
+  }
+
+  .careers-cta__button {
+    margin-top: var(--space-3);
+  }
+
+  @media (max-width: 880px) {
+    .roles-table thead {
+      display: none;
+    }
+
+    .roles-table tr {
+      display: block;
+      margin-bottom: var(--space-3);
+      border-top: 1px solid var(--color-border);
+      padding-top: var(--space-2);
+    }
+
+    .roles-table th,
+    .roles-table td {
+      display: block;
+      border: none;
+      padding: 0.2rem 0;
+      white-space: normal;
+    }
+
+    .roles-table tbody th {
+      padding-top: 0.2rem;
+    }
+
+    .roles-table__apply {
+      margin-top: 0.4rem;
+      display: inline-block;
+    }
+  }
+</style>
