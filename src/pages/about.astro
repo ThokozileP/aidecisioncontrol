@@ -2,91 +2,302 @@
 export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
-import ConceptCard from '../components/ConceptCard.astro';
-import { aboutFocusAreas } from '../data/aboutFocus';
+import { mailto } from '../consts';
+import { aboutFocusClusters } from '../data/aboutFocus';
+import { founder } from '../data/founder';
 ---
 
 <BaseLayout
   title="About"
   description="The AI Decision Control Forum is an independent practitioner initiative convening cross-disciplinary expertise around the operational control of consequential AI decisions."
 >
-  <section class="section hero">
+  <section class="section section--dark about-header">
     <div class="wrapper">
       <p class="eyebrow">About</p>
       <h1>Why the Forum exists</h1>
-      <div class="hero__copy">
-        <p>
-          AI governance has made substantial progress in defining principles, responsibilities,
-          risk frameworks and regulatory obligations.
-        </p>
-        <p>
-          But as AI becomes embedded in operational workflows, organisations face another
-          challenge:
-        </p>
-        <p class="hero__question">
-          How are those requirements enforced at the moment an AI-supported decision or action
-          occurs?
-        </p>
-        <p>
-          The AI Decision Control Forum exists to bring together the disciplines required to
-          answer that question.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--alt">
-    <div class="wrapper">
-      <SectionHeading heading="Our focus" lede="The Forum examines the intersection of:" />
-      <div class="grid grid--4">
-        {aboutFocusAreas.map((area) => <ConceptCard term={area.term} question={area.question} />)}
+      <p class="lede">
+        AI governance has made real progress on principles, responsibilities and risk
+        frameworks. This is about what happens at the moment an AI-supported decision or
+        action actually occurs.
+      </p>
+      <div class="mini-console" aria-hidden="true">
+        <span>Policy</span>
+        <span>Authority</span>
+        <span>Context</span>
+        <span>Control</span>
+        <span>Evidence</span>
+        <span>Accountability</span>
       </div>
     </div>
   </section>
 
   <section class="section">
-    <div class="wrapper independence">
-      <SectionHeading heading="Independence" />
+    <div class="wrapper intro">
+      <p class="intro__callout">
+        How are those requirements enforced at the moment an AI-supported decision or action
+        occurs?
+      </p>
+      <p>
+        As AI becomes embedded in operational workflows, organisations face a question
+        governance alone doesn't answer. The AI Decision Control Forum exists to bring
+        together the disciplines required to work through it, across engineering, risk,
+        healthcare, financial services, assurance, regulation and research.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="wrapper">
+      <SectionHeading eyebrow="Our focus" heading="Two moments, six questions." />
+      {
+        aboutFocusClusters.map((cluster) => (
+          <div class="focus-cluster">
+            <p class="focus-cluster__label">{cluster.label}</p>
+            <div class="focus-grid">
+              {cluster.areas.map((area) => (
+                <div class="focus-cell">
+                  <h3>{area.term}</h3>
+                  <p>{area.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrapper">
+      <SectionHeading eyebrow="Who's behind it" heading="Convened by a practitioner, not a committee." />
+      <div class="founder">
+        <div class="founder__mark" aria-hidden="true">{founder.initials}</div>
+        <div>
+          <h3 class="founder__name">{founder.name}</h3>
+          <p class="founder__title">{founder.title}</p>
+          <p class="founder__bio">
+            {founder.bio} (DOI: <a href={founder.doiUrl}>{founder.doi}</a>)
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrapper">
+      <div class="independence">
+        <p>
+          The Forum is an independent practitioner initiative, not a regulator, standards body
+          or certification authority. Its purpose is to convene expertise, not to set rules.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark" id="join">
+    <div class="wrapper">
+      <p class="eyebrow">Get involved</p>
+      <h2>Bring your organisation into the Forum.</h2>
       <p class="lede">
-        The AI Decision Control Forum is being developed as an independent practitioner
-        initiative. Its purpose is to convene cross-disciplinary expertise around the operational
-        control of consequential AI decisions.
+        Partner with us on research and programming, or sponsor an upcoming event to reach the
+        practitioners shaping this field.
       </p>
-      <p class="independence__note">
-        The Forum is not a regulator, standards body or certification authority.
-      </p>
+      <div class="closing-cta__ctas">
+        <a class="button button--primary" href={mailto('Partner with the Forum')}>Partner with us</a>
+        <a class="closing-cta__link" href={mailto('Sponsor an Event')}>Sponsor our next event</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .hero h1 {
-    font-size: clamp(1.9rem, 1.5rem + 1.8vw, 2.5rem);
+  .about-header {
+    padding-block: 6rem 4.5rem;
+  }
+
+  .about-header h1 {
+    color: var(--color-white);
+    max-width: 16ch;
+    font-size: clamp(1.9rem, 1.5rem + 1.8vw, 2.75rem);
     margin-top: var(--space-1);
   }
 
-  .hero__copy {
+  .about-header .lede {
+    margin-top: var(--space-2);
+  }
+
+  .mini-console {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    max-width: 62ch;
-    margin-top: var(--space-3);
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    margin-top: var(--space-4);
+    max-width: 35rem;
+  }
+
+  .mini-console span {
+    flex: 1;
+    background: var(--color-navy-deep);
+    padding: 0.75rem 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+  }
+
+  .intro {
+    max-width: 45rem;
+  }
+
+  .intro__callout {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--color-navy);
+    max-width: 44ch;
+    margin-bottom: var(--space-2);
+  }
+
+  .intro p:not(.intro__callout) {
     color: var(--color-ink-muted);
     font-size: 1.05rem;
   }
 
-  .hero__question {
-    font-size: 1.25rem;
-    font-weight: 650;
-    color: var(--color-navy-deep);
+  .focus-cluster {
+    margin-bottom: var(--space-3);
+  }
+
+  .focus-cluster:last-child {
+    margin-bottom: 0;
+  }
+
+  .focus-cluster__label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-bottom: none;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .focus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+  }
+
+  .focus-cell {
+    background: var(--color-white);
+    padding: var(--space-3);
+  }
+
+  .focus-cell h3 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-ink);
+    margin-bottom: 0.4rem;
+  }
+
+  .focus-cell p {
+    font-size: 0.9rem;
+    color: var(--color-ink-muted);
+  }
+
+  .founder {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-3);
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+  }
+
+  .founder__mark {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 1px dashed var(--color-border);
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-ink-muted);
+  }
+
+  .founder__name {
+    font-size: 1.05rem;
+  }
+
+  .founder__title {
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+    margin-top: 0.2rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .founder__bio {
+    font-size: 0.98rem;
+    color: var(--color-ink-muted);
+  }
+
+  .founder__bio a {
+    color: var(--color-navy);
+    text-decoration: underline;
   }
 
   .independence {
-    max-width: 62ch;
+    background: rgba(6, 27, 58, 0.04);
+    border-left: 3px solid var(--color-border);
+    padding: var(--space-2) var(--space-3);
+    max-width: 55rem;
   }
 
-  .independence__note {
-    margin-top: var(--space-2);
+  .independence p {
     color: var(--color-ink-muted);
+    font-size: 0.95rem;
+  }
+
+  .closing-cta__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+    margin-top: var(--space-3);
+  }
+
+  .closing-cta__link {
+    color: #dce3ec;
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(220, 227, 236, 0.5);
+    padding-bottom: 2px;
+  }
+
+  .closing-cta__link:hover {
+    border-bottom-color: #dce3ec;
+  }
+
+  @media (max-width: 880px) {
+    .focus-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .founder {
+      flex-direction: column;
+    }
+
+    .mini-console {
+      flex-wrap: wrap;
+    }
   }
 </style>

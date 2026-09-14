@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About | AI Decision Control Forum — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#061B3A;
+    --navy-deep:#04122A;
+    --bg:#F4F6F8;
+    --panel:#FFFFFF;
+    --ink:#0B1220;
+    --ink-soft:#4A5568;
+    --line:#D8DEE6;
+    --allow:#1F8A5F;
+    --escalate:#B8792A;
+    --block:#A73A34;
+    --serif: 'Libre Caslon Text', Georgia, serif;
+    --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --maxw: 1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  img,svg{display:block;max-width:100%;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+  p{max-width:62ch;color:var(--ink-soft);}
+  h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--navy);margin:0;}
+  :focus-visible{outline:2px solid var(--navy);outline-offset:3px;}
+
+  /* Header */
+  header{position:sticky;top:0;z-index:50;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.12);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;max-width:var(--maxw);margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-family:var(--serif);font-size:19px;}
+  .brand-mark{width:26px;height:26px;flex:0 0 auto;}
+  nav.primary-links{display:flex;gap:28px;list-style:none;margin:0;padding:0;}
+  nav.primary-links a{color:#DCE3EC;text-decoration:none;font-size:14.5px;padding:6px 2px;border-bottom:1px solid transparent;}
+  nav.primary-links a.current{color:#fff;border-bottom-color:#fff;}
+  nav.primary-links a:hover{border-bottom-color:#DCE3EC;color:#fff;}
+  .nav-right{display:flex;align-items:center;gap:18px;}
+  .cta-btn{background:#fff;color:var(--navy);font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 18px;border-radius:3px;text-decoration:none;border:1px solid #fff;}
+  .cta-btn:hover{background:transparent;color:#fff;}
+  .menu-toggle{display:none;background:none;border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 10px;border-radius:3px;}
+
+  /* Page header (navy, no photo — this page doesn't force the hero image) */
+  .page-header{background:var(--navy);color:#fff;padding:96px 0 72px;}
+  .kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;color:#8FA3C2;margin-bottom:18px;}
+  .page-header h1{color:#fff;font-size:clamp(30px,4vw,44px);line-height:1.15;max-width:16ch;margin-bottom:18px;}
+  .page-header .lede{max-width:58ch;color:#C4D0E0;font-size:17px;}
+
+  /* small console diagram strip, ties back to the site system without the photo */
+  .mini-console{display:flex;gap:1px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.14);margin-top:36px;max-width:560px;}
+  .mini-console span{flex:1;background:var(--navy-deep);padding:12px 14px;font-family:var(--mono);font-size:11px;color:#8FA3C2;}
+
+  section{padding:72px 0;}
+  .section-head{max-width:640px;margin-bottom:36px;}
+  .section-label{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  section h2{font-size:clamp(22px,2.4vw,30px);line-height:1.28;max-width:22ch;}
+
+  /* Why the forum exists — intro */
+  .intro p{font-size:16px;}
+  .intro .callout{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--navy);max-width:44ch;margin:22px 0;}
+
+  /* Focus areas — grouped clusters instead of a flat 6-up grid */
+  .focus-cluster{margin-bottom:1px;}
+  .focus-cluster-label{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:14px 22px;background:#EBEEF2;border:1px solid var(--line);border-bottom:none;}
+  .focus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:28px;}
+  .focus-cell{background:var(--panel);padding:22px;}
+  .focus-cell h3{font-family:var(--sans);font-size:15.5px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .focus-cell p{font-size:13.5px;margin:0;}
+
+  /* Who's behind it */
+  .founder{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:30px;display:flex;gap:24px;align-items:flex-start;}
+  .founder-mark{width:44px;height:44px;border-radius:50%;border:1px dashed var(--line);flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--ink-soft);}
+  .founder .placeholder-note{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-top:10px;display:block;}
+
+  /* Independence note — smaller, mid-page, not the closing statement */
+  .independence{background:#EBEEF2;border-left:3px solid var(--line);padding:18px 22px;}
+  .independence p{font-size:14px;margin:0;}
+
+  /* Closing CTA */
+  .closing-cta{background:var(--navy);color:#fff;text-align:left;}
+  .closing-cta h2{color:#fff;max-width:20ch;}
+  .closing-cta p{color:#C4D0E0;margin-top:14px;}
+  .closing-cta .hero-ctas{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;}
+  .btn-primary{background:#fff;color:var(--navy);font-weight:600;font-size:15px;padding:13px 22px;border-radius:3px;text-decoration:none;}
+  .btn-primary:hover{background:#DCE3EC;}
+  .btn-text{color:#DCE3EC;text-decoration:none;font-size:15px;border-bottom:1px solid rgba(220,227,236,.5);padding-bottom:2px;}
+  .btn-text:hover{border-color:#DCE3EC;}
+
+  /* Footer — trimmed to match the header nav */
+  footer{background:var(--navy-deep);color:#8FA3C2;padding:44px 0 32px;font-size:13px;}
+  .footer-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:24px;}
+  .footer-links{display:flex;gap:20px;list-style:none;margin:0;padding:0;flex-wrap:wrap;}
+  .footer-links a{color:#8FA3C2;text-decoration:none;font-size:13px;}
+  .footer-links a:hover{color:#fff;}
+  .footer-note{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;font-size:12px;color:#6B7C96;max-width:70ch;}
+
+  @media (max-width: 880px){
+    nav.primary-links, .nav-right .cta-btn{display:none;}
+    .menu-toggle{display:block;}
+    .focus-grid{grid-template-columns:1fr;}
+    .founder{flex-direction:column;}
+    .mini-console{flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" rx="3" stroke="#DCE3EC" stroke-width="1.4"/><path d="M13 6v6l4 3" stroke="#DCE3EC" stroke-width="1.4" stroke-linecap="round"/></svg>
+      AI Decision Control
+    </a>
+    <ul class="primary-links">
+      <li><a href="#">Forum</a></li>
+      <li><a href="#">Perspectives</a></li>
+      <li><a href="#">Membership</a></li>
+      <li><a href="#" class="current">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="cta-btn" href="#join">Become a member</a>
+      <button class="menu-toggle" aria-label="Open menu">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- PAGE HEADER: navy, no photo, consistent with the homepage's identity without forcing the hero image -->
+  <section class="page-header">
+    <div class="wrap">
+      <div class="kicker">ABOUT</div>
+      <h1>Why the Forum exists</h1>
+      <p class="lede">
+        AI governance has made real progress on principles, responsibilities and risk frameworks.
+        This is about what happens at the moment an AI-supported decision or action actually occurs.
+      </p>
+      <div class="mini-console" aria-hidden="true">
+        <span>POLICY</span><span>AUTHORITY</span><span>CONTEXT</span><span>CONTROL</span><span>EVIDENCE</span><span>ACCOUNTABILITY</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <div class="wrap" style="max-width:720px;">
+      <p class="callout">How are those requirements enforced at the moment an AI-supported decision or action occurs?</p>
+      <p>
+        As AI becomes embedded in operational workflows, organisations face a question governance alone
+        doesn't answer. The AI Decision Control Forum exists to bring together the disciplines required
+        to work through it, across engineering, risk, healthcare, financial services, assurance,
+        regulation and research.
+      </p>
+    </div>
+  </section>
+
+  <!-- OUR FOCUS: grouped into two clusters instead of six flat items -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">OUR FOCUS</div>
+        <h2>Two moments, six questions.</h2>
+      </div>
+
+      <div class="focus-cluster">
+        <div class="focus-cluster-label">BEFORE THE DECISION</div>
+        <div class="focus-grid">
+          <div class="focus-cell">
+            <h3>Policy</h3>
+            <p>What should be allowed, as a matter of organisational rule.</p>
+          </div>
+          <div class="focus-cell">
+            <h3>Authority</h3>
+            <p>Who is entitled to decide, and on what basis.</p>
+          </div>
+          <div class="focus-cell">
+            <h3>Context</h3>
+            <p>Under what circumstances the rule and the authority actually apply.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="focus-cluster">
+        <div class="focus-cluster-label">AT AND AFTER THE DECISION</div>
+        <div class="focus-grid">
+          <div class="focus-cell">
+            <h3>Control</h3>
+            <p>What happens before execution: what's checked, and what can stop it.</p>
+          </div>
+          <div class="focus-cell">
+            <h3>Evidence</h3>
+            <p>What gets recorded at the moment the decision is made.</p>
+          </div>
+          <div class="focus-cell">
+            <h3>Accountability</h3>
+            <p>Whether the organisation can explain and reconstruct the decision afterward.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO'S BEHIND IT -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">WHO'S BEHIND IT</div>
+        <h2>Convened by a practitioner, not a committee.</h2>
+      </div>
+      <div class="founder">
+        <div class="founder-mark">TP</div>
+        <div>
+          <h3 style="font-size:17px;margin-bottom:4px;">Thokozile Phiri</h3>
+          <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">Founder, AI Decision Control Forum</p>
+          <p style="font-size:15px;">
+            Thokozile Phiri founded the AI Decision Control Forum alongside Giggle AI Innovation and CARC
+            (Clinical Agent Runtime Control), a runtime control and evidence layer for autonomous clinical
+            AI agents. She is the publisher of the Decision Context Record™ framework, which defines the
+            runtime evidence CARC's Evidence Engine captures for every clinical agent run
+            (DOI: <a href="https://zenodo.org/records/20663952" style="color:var(--navy);text-decoration:underline;">10.5281/zenodo.20663952</a>).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDEPENDENCE: moved mid-page, kept short, no longer the page's last word -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="independence">
+        <p>
+          The Forum is an independent practitioner initiative, not a regulator, standards body
+          or certification authority. Its purpose is to convene expertise, not to set rules.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING CTA — a different ask than the header's, not a repeat of "Apply to the Founding Circle" -->
+  <section class="closing-cta" id="join">
+    <div class="wrap">
+      <div class="section-label" style="color:#8FA3C2;">GET INVOLVED</div>
+      <h2>Bring your organisation into the Forum.</h2>
+      <p>Partner with us on research and programming, or sponsor an upcoming event to reach the practitioners shaping this field.</p>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="#">Partner with us</a>
+        <a class="btn-text" href="#">Sponsor our next event</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <div style="font-family:var(--serif);color:#fff;font-size:16px;">AI Decision Control Forum</div>
+      <ul class="footer-links">
+        <li><a href="#">Forum</a></li>
+        <li><a href="#">Perspectives</a></li>
+        <li><a href="#">Membership</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+    </div>
+    <div class="footer-note">
+      AI Decision Control is an emerging area of practice. The Forum exists to explore and develop
+      its operational principles collaboratively. © 2026 AI Decision Control Forum.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

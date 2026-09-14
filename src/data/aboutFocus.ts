@@ -1,14 +1,40 @@
 export interface FocusArea {
   term: string;
-  question: string;
+  body: string;
 }
 
-// "Our focus" section on the About page.
-export const aboutFocusAreas: FocusArea[] = [
-  { term: 'Policy', question: 'What should be allowed?' },
-  { term: 'Authority', question: 'Who is entitled to decide?' },
-  { term: 'Context', question: 'Under what circumstances?' },
-  { term: 'Control', question: 'What happens before execution?' },
-  { term: 'Evidence', question: 'What should be recorded?' },
-  { term: 'Accountability', question: 'Can the organisation explain and reconstruct the decision?' },
+export interface FocusCluster {
+  label: string;
+  areas: FocusArea[];
+}
+
+// "Our focus" section on the About page — grouped into two moments: what's
+// decided before an AI-supported action occurs, and what's captured at and
+// after it.
+export const aboutFocusClusters: FocusCluster[] = [
+  {
+    label: 'Before the decision',
+    areas: [
+      { term: 'Policy', body: 'What should be allowed, as a matter of organisational rule.' },
+      { term: 'Authority', body: 'Who is entitled to decide, and on what basis.' },
+      {
+        term: 'Context',
+        body: 'Under what circumstances the rule and the authority actually apply.',
+      },
+    ],
+  },
+  {
+    label: 'At and after the decision',
+    areas: [
+      {
+        term: 'Control',
+        body: "What happens before execution: what's checked, and what can stop it.",
+      },
+      { term: 'Evidence', body: 'What gets recorded at the moment the decision is made.' },
+      {
+        term: 'Accountability',
+        body: 'Whether the organisation can explain and reconstruct the decision afterward.',
+      },
+    ],
+  },
 ];
