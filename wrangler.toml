@@ -40,3 +40,18 @@ persist = true
 # either way. See README.md "Membership application".
 [[kv_namespaces]]
 binding = "MEMBERSHIPS"
+
+# Volunteer applications (/careers, /api/volunteers/apply) get their own KV
+# namespace — same no-`id`/auto-provision mechanism as MEMBERSHIPS above.
+# See README.md "Volunteer applications".
+[[kv_namespaces]]
+binding = "VOLUNTEERS"
+
+# CVs uploaded via the volunteer application form. KV isn't meant for binary
+# files, so these go to R2 instead. No `bucket_name` is set here on purpose,
+# for the same reason MEMBERSHIPS has no `id`: wrangler auto-provisions a
+# real bucket for any r2_buckets binding with no bucket_name on
+# `wrangler deploy`. `astro dev`/`wrangler dev` simulate it locally with no
+# setup needed either. See README.md "Volunteer applications".
+[[r2_buckets]]
+binding = "VOLUNTEER_CVS"

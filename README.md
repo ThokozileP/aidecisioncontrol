@@ -259,6 +259,44 @@ Key files: `src/lib/membership/` (schema, types, status logic, KV store),
 `src/pages/membership/success.astro`, and the form itself in
 `src/components/membership/`.
 
+## Volunteer applications
+
+`/careers` lists the Forum's open volunteer roles (`src/data/volunteerRoles.ts`). Each
+role's "Apply" button opens a modal (`src/components/careers/VolunteerApplyModal.tsx`)
+that collects name, email, LinkedIn (optional), a CV file, and a motivation statement,
+and posts them to `/api/volunteers/apply`.
+
+Unlike membership, this is a one-shot submission with no payment or activation
+lifecycle, and no admin dashboard — the only place applications surface today is the
+notification email (below) and direct KV/R2 access.
+
+**Setup:**
+
+1. **Cloudflare KV and R2** — applications are stored in the `VOLUNTEERS` KV namespace
+   and CVs in the `VOLUNTEER_CVS` R2 bucket, both declared in `wrangler.toml` with no
+   `id`/`bucket_name` — Cloudflare auto-provisions real resources for either on the first
+   production `wrangler deploy`, the same mechanism `MEMBERSHIPS` already relies on (see
+   "KV namespace auto-provisioning" above; the same applies to R2 buckets).
+   `astro dev`/`wrangler dev` simulate both locally with no setup needed either.
+2. **Email (optional)** — reuses the same `RESEND_API_KEY`/`RESEND_FROM_EMAIL` as
+   membership to notify `hello@aidecisioncontrol.org` of each new application
+   (`src/lib/email/sendVolunteerApplicationNotification.ts`). Without it, applications
+   still save — the email step just logs a warning and skips, same as membership.
+
+**Validation and abuse protection:** name/email/role/motivation are required and a CV
+file (`.pdf`/`.doc`/`.docx`, under 5MB) is required — all enforced server-side in
+`src/pages/api/volunteers/apply.ts` regardless of what the browser's `accept` attribute
+or client-side checks allowed through. A hidden honeypot field
+(`VolunteerApplyModal.tsx`) and a simple per-IP KV rate limit (5 requests/minute,
+best-effort — see the caveat in `src/lib/volunteers/store.ts`) cover casual abuse; this
+deliberately doesn't need anything as elaborate as the Stripe webhook verification in
+the membership flow.
+
+Key files: `src/lib/volunteers/` (schema, types, KV/R2 store),
+`src/lib/email/sendVolunteerApplicationNotification.ts`,
+`src/pages/api/volunteers/apply.ts`, `src/pages/careers.astro`, and
+`src/components/careers/VolunteerApplyModal.tsx`.
+
 ## Custom domain
 
 Production is served at **aidecisioncontrol.org**. The domain's nameservers are already

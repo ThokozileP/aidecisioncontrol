@@ -3,6 +3,8 @@ export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { mailto } from '../consts';
 import { volunteerRoles } from '../data/volunteerRoles';
+import { VolunteerApplyModal } from '../components/careers/VolunteerApplyModal';
+import '../styles/careers.css';
 ---
 
 <BaseLayout
@@ -41,9 +43,9 @@ import { volunteerRoles } from '../data/volunteerRoles';
                   <td>{role.responsibilities}</td>
                   <td class="roles-table__commitment">{role.commitment ?? '—'}</td>
                   <td>
-                    <a class="roles-table__apply" href={mailto(`Volunteering: ${role.title}`)}>
+                    <button type="button" class="roles-table__apply" data-apply-role={role.title}>
                       Apply
-                    </a>
+                    </button>
                   </td>
                 </tr>
               ))
@@ -66,7 +68,18 @@ import { volunteerRoles } from '../data/volunteerRoles';
       </a>
     </div>
   </section>
+
+  <VolunteerApplyModal client:load />
 </BaseLayout>
+
+<script>
+  document.querySelectorAll('[data-apply-role]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const role = (button as HTMLElement).dataset.applyRole;
+      window.dispatchEvent(new CustomEvent('volunteer-apply-open', { detail: { role } }));
+    });
+  });
+</script>
 
 <style>
   .careers-header h1 {
@@ -131,11 +144,16 @@ import { volunteerRoles } from '../data/volunteerRoles';
   }
 
   .roles-table__apply {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
     color: var(--color-navy);
     text-decoration: underline;
     text-decoration-color: var(--color-border);
     white-space: nowrap;
     font-size: 0.9rem;
+    cursor: pointer;
   }
 
   .roles-table__apply:hover {
