@@ -1,4 +1,4 @@
-export interface FoundingExpert {
+export interface ForumExpert {
   name: string;
   role: string;
   affiliation: string;
@@ -9,9 +9,9 @@ export interface FoundingExpert {
 }
 
 // No members are confirmed yet. Add entries here as experts confirm —
-// pages that list Founding Experts filter on `confirmed` automatically,
+// pages that list Forum Experts filter on `confirmed` automatically,
 // so nothing appears until it is explicitly set to true.
-export const foundingExperts: FoundingExpert[] = [];
+export const forumExperts: ForumExpert[] = [];
 
 export const relevantBackgrounds: string[] = [
   'AI risk and model risk',
@@ -28,7 +28,7 @@ export const relevantBackgrounds: string[] = [
   'Clinical implementation',
 ];
 
-export const foundingExpertCommitments: string[] = [
+export const forumExpertCommitments: string[] = [
   'Participate in selected expert roundtables',
   'Challenge and refine emerging concepts',
   'Identify real operational control problems',

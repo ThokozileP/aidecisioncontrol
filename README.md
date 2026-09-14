@@ -270,7 +270,7 @@ not manage DNS.
 
 ## Content policy
 
-- No confirmed Founding Experts, events, dates or partnerships are invented. Data
+- No confirmed Forum Experts, events, dates or partnerships are invented. Data
   structures in `src/data/` are ready for real content to be added as it is confirmed.
 - All contact links use `hello@aidecisioncontrol.org`.
 - The Forum's LinkedIn URL is a placeholder (`SITE.linkedInUrl` in `src/consts.ts`) —

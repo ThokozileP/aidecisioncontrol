@@ -1,5 +1,5 @@
 export const INTEREST_OPTIONS = [
-  'Founding Circle membership',
+  'Expert Circle membership',
   'General updates',
   'Speaking or contributing research',
 ] as const;
