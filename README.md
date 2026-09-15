@@ -273,11 +273,20 @@ notification email (below) and direct KV/R2 access.
 **Setup:**
 
 1. **Cloudflare KV and R2** — applications are stored in the `VOLUNTEERS` KV namespace
-   and CVs in the `VOLUNTEER_CVS` R2 bucket, both declared in `wrangler.toml` with no
-   `id`/`bucket_name` — Cloudflare auto-provisions real resources for either on the first
-   production `wrangler deploy`, the same mechanism `MEMBERSHIPS` already relies on (see
-   "KV namespace auto-provisioning" above; the same applies to R2 buckets).
-   `astro dev`/`wrangler dev` simulate both locally with no setup needed either.
+   and CVs in the `VOLUNTEER_CVS` R2 bucket, both declared in `wrangler.toml` with
+   explicit `id`/`bucket_name` values. Unlike `MEMBERSHIPS` (see "KV namespace
+   auto-provisioning" above), these were **not** left to auto-provision: on this
+   project's first deploy of each binding, the dashboard "Workers Build" pipeline
+   treated the missing `id`/`bucket_name` as "inherit this binding from the previously
+   deployed Worker version" rather than provisioning a new resource, which fails (API
+   error code 10057) since there's no previous version with a binding of that name yet.
+   If this project ever needs another new KV namespace or R2 bucket, create it explicitly
+   first — `wrangler kv namespace create <NAME>` / `wrangler r2 bucket create <name>` —
+   and put the returned id/bucket_name in `wrangler.toml`, rather than relying on
+   auto-provisioning for a *brand-new* binding. R2 must also be enabled on the Cloudflare
+   account once via the dashboard (R2 → enable) before `wrangler r2 bucket create` works;
+   the API/CLI can't do that step. `astro dev`/`wrangler dev` simulate both locally with
+   no setup needed either way.
 2. **Email (optional)** — reuses the same `RESEND_API_KEY`/`RESEND_FROM_EMAIL` as
    membership to notify `hello@aidecisioncontrol.org` of each new application
    (`src/lib/email/sendVolunteerApplicationNotification.ts`). Without it, applications

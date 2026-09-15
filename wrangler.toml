@@ -42,16 +42,25 @@ persist = true
 binding = "MEMBERSHIPS"
 
 # Volunteer applications (/careers, /api/volunteers/apply) get their own KV
-# namespace — same no-`id`/auto-provision mechanism as MEMBERSHIPS above.
-# See README.md "Volunteer applications".
+# namespace. Unlike MEMBERSHIPS, this has an explicit `id` — omitting it (to
+# rely on the same no-`id`/auto-provision mechanism as MEMBERSHIPS) failed
+# on this project's first deploy of this binding: the dashboard "Workers
+# Build" pipeline treated the missing id as "inherit this binding from the
+# previously deployed Worker version" rather than provisioning a new
+# namespace, which errored (code 10057) since there was no previous version
+# with this binding name yet. Created with `wrangler kv namespace create
+# VOLUNTEERS`. See README.md "Volunteer applications".
 [[kv_namespaces]]
 binding = "VOLUNTEERS"
+id = "9773fece2dcb49b6a9c025bc08dd30f3"
 
 # CVs uploaded via the volunteer application form. KV isn't meant for binary
-# files, so these go to R2 instead. No `bucket_name` is set here on purpose,
-# for the same reason MEMBERSHIPS has no `id`: wrangler auto-provisions a
-# real bucket for any r2_buckets binding with no bucket_name on
-# `wrangler deploy`. `astro dev`/`wrangler dev` simulate it locally with no
-# setup needed either. See README.md "Volunteer applications".
+# files, so these go to R2 instead. Has an explicit `bucket_name` for the
+# same reason VOLUNTEERS above has an explicit `id` — the same "inherit
+# binding" first-deploy failure applies to r2_buckets too. Create with
+# `wrangler r2 bucket create <name>` (R2 must be enabled on the account via
+# the Cloudflare dashboard first if it isn't already — the API/CLI can't do
+# that step). See README.md "Volunteer applications".
 [[r2_buckets]]
 binding = "VOLUNTEER_CVS"
+bucket_name = "aidecisioncontrol-volunteer-cvs"
