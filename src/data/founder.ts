@@ -14,16 +14,12 @@ export const founder: Founder = {
   photo: '/thokozile-founder.PNG',
   bio:
     'Thokozile Phiri is an AI Product Leader, AI Governance practitioner and technology ' +
-    'entrepreneur with over 10 years of experience across B2B SaaS, software platforms, ' +
-    'digital transformation and AI. She is the founder of CARC through Giggle AI Innovation, ' +
-    'where she develops AI technology focused on practical applications of artificial ' +
-    'intelligence, combining hands-on product leadership with a strong focus on AI governance, ' +
-    'human oversight and decision control. She is also the creator of the Decision Context ' +
-    'Record™, a framework designed to strengthen transparency, accountability and human control ' +
-    'around AI-assisted decisions. Through the AI Decision Control Forum, she brings together ' +
-    'practitioners, researchers and industry leaders to examine how organisations can maintain ' +
-    'meaningful authority, accountability and operational control as AI systems become ' +
-    'increasingly autonomous.',
+    'entrepreneur with over 10 years of experience across B2B SaaS, digital transformation and ' +
+    'AI. She is the founder of CARC through Giggle AI Innovation and the creator of the ' +
+    'Decision Context Record™, a framework for transparency and human control over ' +
+    'AI-assisted decisions. Through the AI Decision Control Forum, she brings together ' +
+    'practitioners and industry leaders to strengthen human authority and operational control ' +
+    'over increasingly autonomous AI systems.',
   doi: '10.5281/zenodo.20663952',
   doiUrl: 'https://zenodo.org/records/20663952',
 };
