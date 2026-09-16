@@ -4,7 +4,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import { mailto } from '../consts';
 import { aboutFocusClusters } from '../data/aboutFocus';
-import { founder } from '../data/founder';
+import { forumTeam } from '../data/team';
+import TeamMember from '../components/TeamMember.astro';
 ---
 
 <BaseLayout
@@ -69,17 +70,20 @@ import { founder } from '../data/founder';
 
   <section class="section">
     <div class="wrapper">
-      <SectionHeading eyebrow="Who's behind it" heading="Convened by a practitioner, not a committee." />
-      <div class="founder">
-        <div class="founder__mark" aria-hidden="true">{founder.initials}</div>
-        <div>
-          <h3 class="founder__name">{founder.name}</h3>
-          <p class="founder__title">{founder.title}</p>
-          <p class="founder__bio">
-            {founder.bio} (DOI: <a href={founder.doiUrl}>{founder.doi}</a>)
-          </p>
-        </div>
-      </div>
+      <SectionHeading
+        eyebrow="Who's behind it"
+        heading="Meet the Forum Team"
+        lede="The AI Decision Control Forum brings together practitioners and experts working at the intersection of AI, governance, technology and institutional decision-making."
+      />
+      <ul class="grid grid--3 team-grid">
+        {
+          forumTeam.map((member) => (
+            <li>
+              <TeamMember {...member} />
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
@@ -210,49 +214,9 @@ import { founder } from '../data/founder';
     color: var(--color-ink-muted);
   }
 
-  .founder {
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    padding: var(--space-3);
-    display: flex;
-    gap: var(--space-3);
-    align-items: flex-start;
-  }
-
-  .founder__mark {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    border: 1px dashed var(--color-border);
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-ink-muted);
-  }
-
-  .founder__name {
-    font-size: 1.05rem;
-  }
-
-  .founder__title {
-    font-size: 0.85rem;
-    color: var(--color-ink-muted);
-    margin-top: 0.2rem;
-    margin-bottom: var(--space-2);
-  }
-
-  .founder__bio {
-    font-size: 0.98rem;
-    color: var(--color-ink-muted);
-  }
-
-  .founder__bio a {
-    color: var(--color-navy);
-    text-decoration: underline;
+  .team-grid {
+    list-style: none;
+    padding: 0;
   }
 
   .independence {
@@ -290,10 +254,6 @@ import { founder } from '../data/founder';
   @media (max-width: 880px) {
     .focus-grid {
       grid-template-columns: 1fr;
-    }
-
-    .founder {
-      flex-direction: column;
     }
 
     .mini-console {

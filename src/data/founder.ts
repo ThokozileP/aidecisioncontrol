@@ -1,24 +1,29 @@
 export interface Founder {
   name: string;
   title: string;
-  initials: string;
+  photo: string;
   bio: string;
   doi: string;
   doiUrl: string;
 }
 
-// "Who's behind it" section on the About page. `initials` renders as a
-// placeholder mark until there's a real photo to swap in.
+// "Meet the Forum Team" section on the About page.
 export const founder: Founder = {
   name: 'Thokozile Phiri',
   title: 'Founder, AI Decision Control Forum',
-  initials: 'TP',
+  photo: '/thokozile-founder.PNG',
   bio:
-    "Thokozile Phiri founded the AI Decision Control Forum alongside Giggle AI Innovation and " +
-    'CARC (Clinical Agent Runtime Control), a runtime control and evidence layer for autonomous ' +
-    'clinical AI agents. She is the publisher of the Decision Context Record™ framework, ' +
-    "which defines the runtime evidence CARC's Evidence Engine captures for every clinical agent " +
-    'run.',
+    'Thokozile Phiri is an AI Product Leader, AI Governance practitioner and technology ' +
+    'entrepreneur with over 10 years of experience across B2B SaaS, software platforms, ' +
+    'digital transformation and AI. She is the founder of CARC through Giggle AI Innovation, ' +
+    'where she develops AI technology focused on practical applications of artificial ' +
+    'intelligence, combining hands-on product leadership with a strong focus on AI governance, ' +
+    'human oversight and decision control. She is also the creator of the Decision Context ' +
+    'Record™, a framework designed to strengthen transparency, accountability and human control ' +
+    'around AI-assisted decisions. Through the AI Decision Control Forum, she brings together ' +
+    'practitioners, researchers and industry leaders to examine how organisations can maintain ' +
+    'meaningful authority, accountability and operational control as AI systems become ' +
+    'increasingly autonomous.',
   doi: '10.5281/zenodo.20663952',
   doiUrl: 'https://zenodo.org/records/20663952',
 };

@@ -334,6 +334,10 @@ summary:focus-visible {
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 }
 
+.grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
 .grid--4 {
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
 }

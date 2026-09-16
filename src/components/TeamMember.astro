@@ -1,0 +1,95 @@
+---
+interface Props {
+  name: string;
+  role: string;
+  affiliation?: string;
+  bio: string;
+  photo: string;
+  photoAlt: string;
+  photoPosition?: string;
+  doi?: string;
+  doiUrl?: string;
+}
+
+const {
+  name,
+  role,
+  affiliation,
+  bio,
+  photo,
+  photoAlt,
+  photoPosition = '50% 25%',
+  doi,
+  doiUrl,
+} = Astro.props;
+---
+
+<article class="card team-member">
+  <img
+    class="team-member__photo"
+    src={photo}
+    alt={photoAlt}
+    style={`object-position: ${photoPosition};`}
+    loading="lazy"
+    decoding="async"
+  />
+  <h3 class="team-member__name">{name}</h3>
+  <p class="team-member__role">
+    {role}
+    {affiliation && <>, {affiliation}</>}
+  </p>
+  <p class="team-member__bio">
+    {bio}
+    {doi && doiUrl && (
+      <>
+        {' '}(DOI: <a href={doiUrl}>{doi}</a>)
+      </>
+    )}
+  </p>
+</article>
+
+<style>
+  .team-member {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .team-member__photo {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius);
+    background: var(--color-bg);
+  }
+
+  .team-member__name {
+    margin-top: 0.2rem;
+  }
+
+  .team-member__role {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-ink-muted);
+  }
+
+  .team-member__bio {
+    font-size: 0.95rem;
+    color: var(--color-ink-muted);
+  }
+
+  .team-member__bio a {
+    color: var(--color-navy);
+    text-decoration: underline;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .team-member__photo {
+      transition: transform 0.2s ease;
+    }
+
+    .team-member:hover .team-member__photo {
+      transform: scale(1.02);
+    }
+  }
+</style>
