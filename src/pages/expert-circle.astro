@@ -71,7 +71,7 @@ const confirmedExperts = forumExperts.filter((expert) => expert.confirmed);
             {confirmedExperts.map((expert) => (
               <li class="card">
                 <h3>{expert.name}</h3>
-                <p>{expert.role}, {expert.affiliation}</p>
+                <p>{expert.role}{expert.affiliation && <>, {expert.affiliation}</>}</p>
                 <p>{expert.bio}</p>
               </li>
             ))}
