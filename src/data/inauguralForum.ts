@@ -1,10 +1,10 @@
-// Single source of truth for the inaugural AI Decision Control Forum event
-// (/events/inaugural-forum). Date, venue and speakers are not yet confirmed —
-// update the placeholders below in one place once each is locked in, rather
-// than hunting through the page for hard-coded copy.
+// Single source of truth for the inaugural AI Decision Control Forum event.
+// Lives at /events. Date, venue and speakers are not yet confirmed — update
+// the placeholders below in one place once each is locked in, rather than
+// hunting through the page for hard-coded copy.
 
 export const inauguralForum = {
-  path: '/events/inaugural-forum',
+  path: '/events',
   eyebrow: 'Inaugural AI Decision Control Forum',
   title: 'When AI Makes the Decision',
   subtitle: 'How do organisations maintain control as AI becomes increasingly autonomous?',
@@ -15,30 +15,25 @@ export const inauguralForum = {
   dateDetail: 'Exact date to be announced',
   locationHeadline: 'Rotterdam, Netherlands',
   locationDetail: 'Venue to be announced',
-  format: 'Invitation-led cross-sector practitioner roundtable',
-  audience:
-    'AI, technology, risk, compliance, governance and business leaders working with increasingly autonomous AI systems.',
-  size: 'A targeted, intimate discussion — kept deliberately small so the conversation stays practitioner-led.',
+  format: 'Invitation-led',
+  formatDetail: 'Cross-sector practitioner roundtable',
+  audience: 'Targeted, intimate discussion',
+  audienceDetail: 'AI, risk, compliance & business leaders',
 } as const;
 
-export const coreQuestion =
-  'As organisations accelerate toward AI agents and increasingly automated workflows, how do we ensure that humans and organisations remain in control of the decisions AI systems make and the actions they take?';
+export const whyItMattersHeading =
+  'As AI moves from recommendation toward execution, control becomes an operational question, not just a policy one.';
 
-export interface AutonomyStage {
-  stage: string;
-  description: string;
-}
+export const whyItMattersCaption =
+  'This is an ongoing transition, not a claim that AI already acts fully autonomously across organisations today.';
 
 // The "why this matters" progression: from assistance toward execution.
-export const autonomyStages: AutonomyStage[] = [
-  { stage: 'AI Assistants', description: 'Surface information and answer questions. A human still decides what to do with it.' },
-  { stage: 'AI Copilots', description: 'Work alongside people inside existing tools, drafting and suggesting the next step.' },
-  { stage: 'AI Agents', description: 'Take on multi-step tasks and can initiate actions inside defined boundaries.' },
-  { stage: 'Automated Workflows', description: 'Chain decisions and actions together end to end, with less routine human checkpoint by default.' },
-  {
-    stage: 'Increasingly Autonomous Decision-Making',
-    description: 'Organisations face growing questions about authority, delegation and oversight as this transition continues.',
-  },
+export const autonomyStages = [
+  'AI Assistants',
+  'AI Copilots',
+  'AI Agents',
+  'Automated Workflows',
+  'Increasingly Autonomous Decision-Making',
 ];
 
 export const controlThemes = [
@@ -77,35 +72,17 @@ export interface EventSector {
 // focus, healthcare + financial services) — this event is explicitly
 // cross-sector and needs a broader, event-specific list.
 export const eventSectors: EventSector[] = [
-  {
-    name: 'Financial Services',
-    challenge: 'Delegating credit, fraud and transaction decisions to AI while preserving auditability and regulatory accountability.',
-  },
-  {
-    name: 'Healthcare',
-    challenge: 'Keeping clinical authority with a human as AI takes on diagnostic support and care-pathway automation.',
-  },
-  {
-    name: 'Insurance',
-    challenge: 'Maintaining oversight of AI-driven underwriting and claims decisions that directly affect customers.',
-  },
-  {
-    name: 'Energy & Utilities',
-    challenge: 'Defining safe boundaries for AI systems acting inside critical infrastructure and grid operations.',
-  },
-  {
-    name: 'Transport & Logistics',
-    challenge: 'Establishing intervention points for autonomous systems coordinating movement and routing decisions.',
-  },
-  {
-    name: 'Public Services',
-    challenge: 'Demonstrating accountable, auditable decision-making when AI supports services delivered to citizens.',
-  },
-  {
-    name: 'Technology & AI',
-    challenge: 'Designing the controls, monitoring and escalation paths that other regulated sectors will rely on.',
-  },
+  { name: 'Financial Services', challenge: 'Credit, fraud and transaction decisions increasingly executed by autonomous agents.' },
+  { name: 'Healthcare', challenge: 'Clinical support and care-pathway automation where human authority cannot lapse.' },
+  { name: 'Insurance', challenge: 'Underwriting and claims decisions that carry direct financial and legal consequence.' },
+  { name: 'Energy & Utilities', challenge: 'Grid and infrastructure systems where automated action carries physical risk.' },
+  { name: 'Transport & Logistics', challenge: 'Routing and fleet decisions moving from advisory to autonomous execution.' },
+  { name: 'Public Services', challenge: 'Eligibility and resource-allocation decisions affecting citizens directly.' },
+  { name: 'Technology & AI', challenge: 'Teams building the agentic systems that other regulated sectors must now control.' },
 ];
+
+export const otherSectorsNote =
+  'Public sector, critical infrastructure and other regulated industries face the same underlying question.';
 
 export interface FormatStep {
   number: string;
@@ -131,5 +108,5 @@ export const audienceRoles = [
   'Digital transformation leaders',
   'Security and operational risk professionals',
   'Leaders responsible for AI-enabled workflows',
-  'Practitioners working in regulated or high-consequence environments',
+  'Practitioners in regulated or high-consequence environments',
 ];

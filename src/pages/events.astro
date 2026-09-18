@@ -2,177 +2,451 @@
 export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
-import ThemeCard from '../components/ThemeCard.astro';
-import { eventThemes, eventFormats } from '../data/eventThemes';
-import { inauguralForum } from '../data/inauguralForum';
+import {
+  inauguralForum,
+  whyItMattersHeading,
+  whyItMattersCaption,
+  autonomyStages,
+  controlThemes,
+  coreQuestions,
+  eventSectors,
+  otherSectorsNote,
+  formatSteps,
+  audienceRoles,
+} from '../data/inauguralForum';
 import { mailto } from '../consts';
 ---
 
-<BaseLayout
-  title="Events"
-  description="Expert conversations on control at the point of decision. The AI Decision Control Forum runs invitation-only roundtables, practitioner sessions and cross-sector discussions."
->
+<BaseLayout title={inauguralForum.seoTitle} description={inauguralForum.seoDescription}>
+  <!-- Hero -->
   <section class="section hero">
-    <div class="wrapper">
-      <p class="eyebrow">Events</p>
-      <h1>Expert conversations on control at the point of decision.</h1>
-      <p class="lede">
-        The Forum's events bring practitioners together to work through the operational questions
-        that AI governance alone does not answer.
-      </p>
-      <a class="button button--primary" href={mailto('AI Decision Control Events')}>
-        Register interest in future events
-      </a>
+    <div class="wrapper hero-inner">
+      <p class="eyebrow">{inauguralForum.eyebrow}</p>
+      <h1>{inauguralForum.title}</h1>
+      <p class="lede hero-lede">{inauguralForum.subtitle}</p>
+
+      <div class="hero-copy">
+        <p>
+          AI is moving rapidly from assisting people to making decisions, initiating actions and
+          automating entire workflows.
+        </p>
+        <p>
+          As organisations accelerate toward agentic AI, the question is no longer simply how AI
+          should be governed, but how decision authority, accountability and operational control
+          can be maintained when AI systems increasingly act on behalf of organisations.
+        </p>
+      </div>
+
+      <div class="hero-ctas">
+        <a class="button button--primary" href="#register">Request an Invitation</a>
+        <a class="button button--secondary" href="/about">Explore the Forum</a>
+      </div>
     </div>
   </section>
 
+  <!-- Event information -->
   <section class="section section--alt">
     <div class="wrapper">
-      <p class="eyebrow">Featured event</p>
-      <a class="card featured-event" href={inauguralForum.path}>
-        <span class="tag">{inauguralForum.eyebrow}</span>
-        <h2>{inauguralForum.title}</h2>
-        <p class="lede featured-event__lede">{inauguralForum.subtitle}</p>
-        <dl class="featured-event__meta">
-          <div>
-            <dt>Date</dt>
-            <dd>{inauguralForum.dateHeadline}</dd>
-          </div>
-          <div>
-            <dt>Location</dt>
-            <dd>{inauguralForum.locationHeadline}</dd>
-          </div>
-        </dl>
-        <span class="featured-event__cta">View event details →</span>
-      </a>
+      <dl class="event-info">
+        <div class="event-info__item">
+          <dt class="tag">Date</dt>
+          <dd>{inauguralForum.dateHeadline}</dd>
+          <p class="event-info__detail">{inauguralForum.dateDetail}</p>
+        </div>
+        <div class="event-info__item">
+          <dt class="tag">Location</dt>
+          <dd>{inauguralForum.locationHeadline}</dd>
+          <p class="event-info__detail">{inauguralForum.locationDetail}</p>
+        </div>
+        <div class="event-info__item">
+          <dt class="tag">Format</dt>
+          <dd>{inauguralForum.format}</dd>
+          <p class="event-info__detail">{inauguralForum.formatDetail}</p>
+        </div>
+        <div class="event-info__item">
+          <dt class="tag">Audience &amp; size</dt>
+          <dd>{inauguralForum.audience}</dd>
+          <p class="event-info__detail">{inauguralForum.audienceDetail}</p>
+        </div>
+      </dl>
     </div>
   </section>
 
-  <section class="section">
+  <!-- Why this conversation matters -->
+  <section class="section" id="why-it-matters">
     <div class="wrapper">
-      <SectionHeading heading="Format" />
-      <ul class="format-list">
-        {eventFormats.map((format) => <li class="card">{format}</li>)}
+      <SectionHeading eyebrow="Why this conversation matters" heading={whyItMattersHeading} />
+
+      <div class="progression">
+        {
+          autonomyStages.map((stage, index) => (
+            <>
+              <div class="progression__step">{stage}</div>
+              {index < autonomyStages.length - 1 && <div class="progression__arrow" aria-hidden="true">→</div>}
+            </>
+          ))
+        }
+      </div>
+
+      <p class="progression__caption">{whyItMattersCaption}</p>
+
+      <ul class="control-themes">
+        {controlThemes.map((theme) => <li>{theme}</li>)}
       </ul>
     </div>
   </section>
 
-  <section class="section">
+  <!-- The questions we need to answer -->
+  <section class="section section--dark">
     <div class="wrapper">
-      <SectionHeading heading="Proposed discussion themes" lede="Beyond the inaugural Forum, these themes outline the questions future Forum events are expected to address." />
-      <div class="grid grid--2">
-        {eventThemes.map((theme) => <ThemeCard title={theme.title} description={theme.description} />)}
+      <SectionHeading eyebrow="An invitation to contribute" heading="The questions we need to answer" />
+
+      <div class="grid grid--2 questions-grid">
+        {
+          coreQuestions.map((item) => (
+            <div class="card question-card">
+              <span class="tag">{item.number}</span>
+              <p>{item.question}</p>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>
 
-  <section class="section section--dark">
-    <div class="wrapper cta-block">
-      <h2>The inaugural Forum is now open for requests.</h2>
-      <p>
-        Request an invitation to the inaugural Forum, targeted for the first week of December 2026,
-        or register your interest and we'll be in touch as the rest of the Forum's event programme
-        takes shape.
-      </p>
-      <div class="cta-block__ctas">
-        <a class="button button--primary" href={`${inauguralForum.path}#request-invitation`}>
-          Request an Invitation
-        </a>
-        <a class="button button--ghost" href={mailto('AI Decision Control Events')}>
-          Register interest in future events
-        </a>
+  <!-- Cross-sector by design -->
+  <section class="section" id="sectors">
+    <div class="wrapper">
+      <SectionHeading
+        eyebrow="Cross-sector by design"
+        heading="One problem. Different regulated environments."
+        lede="Financial services, healthcare, insurance, energy, transport and other regulated environments face different risks and regulatory requirements. Yet they increasingly share a common challenge: how to delegate decision-making to AI without losing organisational authority and control."
+      />
+      <div class="grid grid--3 sector-grid">
+        {
+          eventSectors.map((sector) => (
+            <div class="card sector-card">
+              <h3>{sector.name}</h3>
+              <p>{sector.challenge}</p>
+            </div>
+          ))
+        }
+        <div class="card sector-card sector-card--note">
+          <p>{otherSectorsNote}</p>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- A different kind of AI event -->
+  <section class="section section--alt" id="format">
+    <div class="wrapper">
+      <SectionHeading eyebrow="Not a traditional conference" heading="A different kind of AI event" />
+      <ol class="format-steps">
+        {
+          formatSteps.map((step) => (
+            <li class="format-steps__item">
+              <span class="tag">{step.number}</span>
+              <h3>{step.title}</h3>
+              <p>{step.description}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Who should be in the room -->
+  <section class="section">
+    <div class="wrapper">
+      <SectionHeading eyebrow="Invitation-led" heading="Who should be in the room?" />
+      <ul class="audience-grid">
+        {audienceRoles.map((role) => <li>{role}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Request an invitation (placeholder — form to follow in a later pass) -->
+  <section class="section section--alt" id="register">
+    <div class="wrapper invitation-section">
+      <p class="eyebrow">Request an invitation</p>
+      <h2>Join the inaugural Forum.</h2>
+      <p class="lede">
+        This is an invitation-led event. The request form will be available here shortly — in the
+        meantime, email the Forum team and we'll follow up as event details are confirmed.
+      </p>
+      <a class="button button--primary" href={mailto('Inaugural AI Decision Control Forum — Request an Invitation')}>
+        Request an Invitation
+      </a>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--color-navy);
+    color: var(--color-white);
+    padding-bottom: 5rem;
+  }
+
+  .hero-inner {
+    max-width: 46rem;
+  }
+
   .hero h1 {
-    font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem);
-    max-width: 22ch;
+    color: var(--color-white);
+    font-size: clamp(2.1rem, 1.5rem + 2.6vw, 3.25rem);
     margin-top: var(--space-1);
+    max-width: 18ch;
   }
 
-  .hero .lede {
-    margin-block: var(--space-2) var(--space-3);
-    max-width: 56ch;
+  .hero-lede {
+    color: var(--color-steel);
+    margin-top: var(--space-2);
+    font-size: 1.2rem;
+    max-width: 46ch;
   }
 
-  .format-list {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
     gap: var(--space-2);
+    margin-top: var(--space-4);
+    max-width: 54ch;
   }
 
-  .format-list li {
-    font-weight: 600;
+  .hero-copy p {
+    color: #d3dce8;
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  /* ---------- Event information ---------- */
+  .event-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .event-info__item dt {
+    margin-bottom: 0.4rem;
+  }
+
+  .event-info__item dd {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
     color: var(--color-navy);
   }
 
-  .cta-block {
+  .event-info__detail {
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+  }
+
+  @media (min-width: 768px) {
+    .event-info {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .event-info {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* ---------- Progression ---------- */
+  .progression {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: var(--space-3);
+  }
+
+  .progression__step {
+    flex: 1 1 10rem;
+    text-align: center;
+    padding: var(--space-2) var(--space-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-navy);
+  }
+
+  .progression__step:last-child {
+    background: var(--color-navy);
+    color: var(--color-white);
+    border-color: var(--color-navy);
+  }
+
+  .progression__arrow {
+    color: var(--color-steel);
+    font-size: 1.1rem;
+    flex: 0 0 auto;
+  }
+
+  .progression__caption {
+    margin-top: var(--space-3);
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+  }
+
+  .control-themes {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .control-themes li {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-navy-deep);
+  }
+
+  /* ---------- Questions grid ---------- */
+  .questions-grid {
+    margin-top: var(--space-4);
+  }
+
+  .question-card {
+    background: var(--color-navy-deep);
+    border-color: rgba(255, 255, 255, 0.14);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .question-card .tag {
+    color: var(--color-steel);
+  }
+
+  .question-card p {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--color-white);
+    max-width: none;
+  }
+
+  /* ---------- Sector cards ---------- */
+  .sector-grid {
+    margin-top: var(--space-4);
+  }
+
+  .sector-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .sector-card p {
+    color: var(--color-ink-muted);
+    font-size: 0.92rem;
+  }
+
+  .sector-card--note {
+    background: var(--color-bg);
+    justify-content: center;
+  }
+
+  /* ---------- Format steps ---------- */
+  .format-steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .format-steps__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .format-steps__item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .format-steps__item h3 {
+    font-size: 1.15rem;
+  }
+
+  .format-steps__item p {
+    color: var(--color-ink-muted);
+    max-width: 60ch;
+  }
+
+  @media (min-width: 768px) {
+    .format-steps__item {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      column-gap: var(--space-3);
+      align-items: baseline;
+    }
+
+    .format-steps__item h3 {
+      grid-column: 2;
+    }
+
+    .format-steps__item p {
+      grid-column: 2;
+    }
+  }
+
+  /* ---------- Audience ---------- */
+  .audience-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .audience-grid li {
+    font-weight: 600;
+    color: var(--color-navy);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* ---------- Request an invitation ---------- */
+  .invitation-section {
     max-width: 40rem;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
   }
 
-  .cta-block p {
-    color: var(--color-steel);
-  }
-
-  .cta-block__ctas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
+  .invitation-section h2 {
     margin-top: var(--space-1);
+    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.25rem);
   }
 
-  .featured-event {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    text-decoration: none;
-    max-width: 42rem;
-    transition: border-color 0.15s ease;
-  }
-
-  .featured-event:hover {
-    border-color: var(--color-navy);
-  }
-
-  .featured-event h2 {
-    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
-  }
-
-  .featured-event__lede {
-    color: var(--color-ink-muted);
-  }
-
-  .featured-event__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-    margin-top: 0.4rem;
-  }
-
-  .featured-event__meta dt {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-ink-muted);
-  }
-
-  .featured-event__meta dd {
-    margin: 0.15rem 0 0;
-    font-weight: 600;
-    color: var(--color-navy);
-  }
-
-  .featured-event__cta {
-    margin-top: 0.4rem;
-    font-weight: 600;
-    color: var(--color-navy);
+  .invitation-section .button {
+    align-self: flex-start;
+    margin-top: var(--space-1);
   }
 </style>
