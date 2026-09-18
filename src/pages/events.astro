@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ThemeCard from '../components/ThemeCard.astro';
 import { eventThemes, eventFormats } from '../data/eventThemes';
+import { inauguralForum } from '../data/inauguralForum';
 import { mailto } from '../consts';
 ---
 
@@ -27,6 +28,28 @@ import { mailto } from '../consts';
 
   <section class="section section--alt">
     <div class="wrapper">
+      <p class="eyebrow">Featured event</p>
+      <a class="card featured-event" href={inauguralForum.path}>
+        <span class="tag">{inauguralForum.eyebrow}</span>
+        <h2>{inauguralForum.title}</h2>
+        <p class="lede featured-event__lede">{inauguralForum.subtitle}</p>
+        <dl class="featured-event__meta">
+          <div>
+            <dt>Date</dt>
+            <dd>{inauguralForum.dateHeadline}</dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>{inauguralForum.locationHeadline}</dd>
+          </div>
+        </dl>
+        <span class="featured-event__cta">View event details →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrapper">
       <SectionHeading heading="Format" />
       <ul class="format-list">
         {eventFormats.map((format) => <li class="card">{format}</li>)}
@@ -36,7 +59,7 @@ import { mailto } from '../consts';
 
   <section class="section">
     <div class="wrapper">
-      <SectionHeading heading="Proposed discussion themes" lede="No dates have been scheduled yet. These themes outline the questions early Forum events are expected to address." />
+      <SectionHeading heading="Proposed discussion themes" lede="Beyond the inaugural Forum, these themes outline the questions future Forum events are expected to address." />
       <div class="grid grid--2">
         {eventThemes.map((theme) => <ThemeCard title={theme.title} description={theme.description} />)}
       </div>
@@ -45,11 +68,20 @@ import { mailto } from '../consts';
 
   <section class="section section--dark">
     <div class="wrapper cta-block">
-      <h2>No events are scheduled yet.</h2>
-      <p>Register your interest and we'll be in touch as the Forum's event programme takes shape.</p>
-      <a class="button button--primary" href={mailto('AI Decision Control Events')}>
-        Register interest in future events
-      </a>
+      <h2>The inaugural Forum is now open for requests.</h2>
+      <p>
+        Request an invitation to the inaugural Forum, targeted for the first week of December 2026,
+        or register your interest and we'll be in touch as the rest of the Forum's event programme
+        takes shape.
+      </p>
+      <div class="cta-block__ctas">
+        <a class="button button--primary" href={`${inauguralForum.path}#request-invitation`}>
+          Request an Invitation
+        </a>
+        <a class="button button--ghost" href={mailto('AI Decision Control Events')}>
+          Register interest in future events
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -89,8 +121,58 @@ import { mailto } from '../consts';
     color: var(--color-steel);
   }
 
-  .cta-block .button {
-    align-self: flex-start;
+  .cta-block__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
     margin-top: var(--space-1);
+  }
+
+  .featured-event {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-decoration: none;
+    max-width: 42rem;
+    transition: border-color 0.15s ease;
+  }
+
+  .featured-event:hover {
+    border-color: var(--color-navy);
+  }
+
+  .featured-event h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  }
+
+  .featured-event__lede {
+    color: var(--color-ink-muted);
+  }
+
+  .featured-event__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: 0.4rem;
+  }
+
+  .featured-event__meta dt {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-muted);
+  }
+
+  .featured-event__meta dd {
+    margin: 0.15rem 0 0;
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+
+  .featured-event__cta {
+    margin-top: 0.4rem;
+    font-weight: 600;
+    color: var(--color-navy);
   }
 </style>

@@ -275,7 +275,7 @@ summary:focus-visible {
 }
 
 .section--alt .button--secondary,
-.section:not(.section--dark):not(.section--alt):not(.membership-success) .button--secondary {
+.section:not(.section--dark):not(.section--alt):not(.membership-success):not(.hero) .button--secondary {
   color: var(--color-navy-deep);
   border-color: var(--color-border);
 }
