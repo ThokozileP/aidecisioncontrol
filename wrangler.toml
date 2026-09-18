@@ -19,6 +19,16 @@ compatibility_date = "2026-08-01"
 # Without this, Workers assets return a generic Cloudflare 404 instead of
 # our branded custom 404 page for any unmatched path.
 not_found_handling = "404-page"
+# Without this, Cloudflare's static-asset router intercepts any request that
+# looks like a browser page navigation (Accept: text/html) and doesn't match
+# a pre-built static file — which includes every SSR page (`prerender =
+# false`, e.g. /admin/memberships, /membership/success) — and serves the
+# not_found_handling page above directly, without ever invoking the Worker.
+# fetch()/XHR calls (different Accept header, e.g. the membership checkout
+# API) were unaffected and worked the whole time, which is why this went
+# unnoticed. `run_worker_first` forces every request through the Worker
+# first, so Astro's own router (and its 404 page) decides what's missing.
+run_worker_first = true
 
 # Workers Logs: captures invocation logs (including console.log/error from
 # the membership API routes and webhook handler) and persists them to the
