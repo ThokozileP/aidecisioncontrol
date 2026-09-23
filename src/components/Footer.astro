@@ -31,6 +31,15 @@ const year = new Date().getFullYear();
           </p>
         )
       }
+      {
+        SITE.youTubeUrl && (
+          <p>
+            <a href={SITE.youTubeUrl} rel="noopener noreferrer" target="_blank">
+              YouTube
+            </a>
+          </p>
+        )
+      }
     </div>
   </div>
 

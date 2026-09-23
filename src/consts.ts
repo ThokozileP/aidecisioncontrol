@@ -11,6 +11,7 @@ export const SITE = {
   supportingStatement: 'From governance requirements to control at the point of execution.',
   email: 'hello@aidecisioncontrol.org',
   linkedInUrl: 'https://www.linkedin.com/company/ai-decision-control-forum',
+  youTubeUrl: 'https://www.youtube.com/@aidecisioncontrolforum',
 } as const;
 
 export function mailto(subject: string): string {

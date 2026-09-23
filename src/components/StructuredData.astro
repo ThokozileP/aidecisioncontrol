@@ -3,7 +3,7 @@ import { SITE } from '../consts';
 
 // Organization schema only — accurate to what the Forum actually is today.
 // No legal entity status, address or registration number is asserted.
-const sameAs = SITE.linkedInUrl ? [SITE.linkedInUrl] : [];
+const sameAs = [SITE.linkedInUrl, SITE.youTubeUrl].filter(Boolean);
 
 const schema = {
   '@context': 'https://schema.org',
