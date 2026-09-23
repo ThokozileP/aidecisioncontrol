@@ -13,6 +13,10 @@ import {
   otherSectorsNote,
   formatSteps,
   audienceRoles,
+  registrationStatusLabel,
+  ticketingSupportingText,
+  ticketTiers,
+  memberEventBenefit,
 } from '../data/inauguralForum';
 import { mailto } from '../consts';
 ---
@@ -166,8 +170,37 @@ import { mailto } from '../consts';
     </div>
   </section>
 
+  <!-- Event tickets (planning/partnership stage — pricing not yet on sale) -->
+  <section class="section section--alt" id="tickets">
+    <div class="wrapper">
+      <span class="status-badge">{registrationStatusLabel}</span>
+      <h2 class="tickets-heading">Event tickets</h2>
+
+      <div class="grid grid--3 ticket-grid">
+        {
+          ticketTiers.map((tier) => (
+            <div class="card ticket-card">
+              <h3>{tier.name}</h3>
+              <p class="ticket-card__price">{tier.price}</p>
+              {tier.note && <p class="ticket-card__note">{tier.note}</p>}
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="tickets-note">{ticketingSupportingText}</p>
+      <a class="button button--primary" href="#register">Request an Invitation</a>
+
+      <div class="card member-callout">
+        <p class="tag member-callout__heading">{memberEventBenefit.heading}</p>
+        <p class="member-callout__body">{memberEventBenefit.body}</p>
+        <a class="button button--ghost" href="/membership">Become a member</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Request an invitation (placeholder — form to follow in a later pass) -->
-  <section class="section section--alt" id="register">
+  <section class="section" id="register">
     <div class="wrapper invitation-section">
       <p class="eyebrow">Request an invitation</p>
       <h2>Join the inaugural Forum.</h2>
@@ -430,6 +463,78 @@ import { mailto } from '../consts';
     color: var(--color-navy);
     padding: var(--space-2) 0;
     border-bottom: 1px solid var(--color-border);
+  }
+
+  /* ---------- Event tickets ---------- */
+  .status-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-navy);
+    border: 1px solid var(--color-navy);
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+  }
+
+  .tickets-heading {
+    margin-top: var(--space-2);
+    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.25rem);
+  }
+
+  .ticket-grid {
+    margin-top: var(--space-4);
+  }
+
+  .ticket-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .ticket-card__price {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    color: var(--color-navy);
+    margin: 0;
+  }
+
+  .ticket-card__note {
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+    margin: 0;
+  }
+
+  .tickets-note {
+    margin-top: var(--space-4);
+    color: var(--color-ink-muted);
+    max-width: 48ch;
+  }
+
+  .tickets-note + .button {
+    margin-top: var(--space-2);
+  }
+
+  .member-callout {
+    margin-top: var(--space-4);
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: flex-start;
+    max-width: 40rem;
+  }
+
+  .member-callout__heading {
+    color: var(--color-navy);
+    font-size: 0.78rem;
+  }
+
+  .member-callout__body {
+    color: var(--color-ink-muted);
+    margin: 0;
   }
 
   /* ---------- Request an invitation ---------- */

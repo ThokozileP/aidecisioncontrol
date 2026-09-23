@@ -110,3 +110,35 @@ export const audienceRoles = [
   'Leaders responsible for AI-enabled workflows',
   'Practitioners in regulated or high-consequence environments',
 ];
+
+// The event is in the planning and partnership stage: no date/venue/sponsor
+// confirmation yet, so ticket sales are not open. Flip this to `true` once
+// they are confirmed and a real registration flow replaces the placeholder
+// CTA on /events — nothing else on the page needs to change structurally.
+export const registrationOpen = false;
+
+export const registrationStatusLabel = registrationOpen ? 'Registration open' : 'Registration opening soon';
+
+export const ticketingSupportingText =
+  'Ticket registration will open once the event date and venue are confirmed.';
+
+export interface TicketTier {
+  name: string;
+  price: string;
+  note?: string;
+}
+
+// Planned pricing structure — not yet on sale. Change freely; nothing else
+// on the page depends on these exact values.
+export const ticketTiers: TicketTier[] = [
+  { name: 'Early Bird', price: '€25', note: 'Limited early-bird places' },
+  { name: 'Standard', price: '€35' },
+  { name: 'Student / Early Career', price: '€15' },
+  { name: 'Forum Member', price: 'Free', note: 'Included with Forum membership' },
+  { name: 'Speaker / Partner', price: 'Free', note: 'By invitation' },
+];
+
+export const memberEventBenefit = {
+  heading: 'Members attend Forum events at no additional cost',
+  body: 'Forum membership includes access to Forum events and discussions throughout the year.',
+};
